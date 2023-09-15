@@ -1,0 +1,676 @@
+mode = bot[getBot().name:upper()].mode
+farmList = bot[getBot().name:upper()].farmList
+idList = bot[getBot().name:upper()].idList
+webhook = bot[getBot().name:upper()].webhook
+messageid = bot[getBot().name:upper()].messageid
+e = 200
+indexx = 1
+local iTile = 0
+local bTile = 0
+local cTile = 0
+
+function round(n)
+    return n % 1 > 0.5 and math.ceil(n) or math.floor(n)
+end
+
+function scanItem()
+    local count = {}
+    for _,obj in pairs(getObjects()) do
+        if count[obj.id] then
+            count[obj.id].count = count[obj.id].count + obj.count
+        else
+            count[obj.id] = {id = obj.id, count = obj.count}
+        end
+    end
+    local str = ""
+    for _,string in pairs(count) do
+        str = str.."\n"..itemInfo(string.id).name.." : "..string.count.." x"
+    end
+    return str
+end
+
+function webcuy(info,link,id)
+    if setting.webhook.access then
+        local script = [[
+            $webHookUrl = "]]..link..[[/messages/]]..id..[["
+            $cpu = (Get-WmiObject win32_processor | Measure-Object -property LoadPercentage -Average | Select Average).Average
+            $ram = (Get-Counter '\Memory\Available MBytes').CounterSamples.CookedValue
+		    $thumbnailObject = @{
+                url = "https://cdn.discordapp.com/attachments/1122342991705673840/1128335180789207040/1689081173833.jpg"
+            }
+            $footerObject = @{
+                text = "]].."Script made by BizzantiuM's | "..(os.date"%d/%m/%y":upper().." Time : ")..os.date("%I")..":"..os.date("%M").." "..os.date("%p"):upper()..[["
+            }
+            $fieldArray = @(
+		    	@{
+                    name = "<:gtSB:1088930275871952957> | BOT TASK :"
+                    value = "**(]]..info..[[)** <:bot5:1122562392589611110>"
+                    inline = "false"
+                }
+            )
+            $embedObject = @{
+                title = "<:DumbBuilder:1094476784860397589> **AUTO HARVEST v1.0** <:DumbBuilder:1094476784860397589>"
+                color = "]]..math.random(1111111,9999999)..[["
+                thumbnail = $thumbnailObject
+                footer = $footerObject
+                fields = $fieldArray
+                description = "]].."<:gpicks:909335456175497226> **BOT INFO :**\n<:gtBot:1068921740065001624> | NAME : ||"..getBot().name.."||\n<:globe:908316136192475197> | WORLD : ||"..getBot().world.."||\n<:Scroll:1083965766187110460> | LEVEL : "..getBot().level.."\n<:Moderator:974278398916591667> | STATUS : "..getBot().status.."\n<:gems:1087076279951568996> | GEMS : "..findItem(112).."\n<:pepper:982947453089247264> | READY : "..scanTrees(setting.item.seed).."\n<:pepper_seed:1125798763194232842> | NOT READY : "..scanTree(setting.item.seed)..""..[["
+            }
+            $embedArray = @($embedObject)
+            $payload = @{
+                embeds = $embedArray
+            }
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            Invoke-RestMethod -Uri $webHookUrl -Body ($payload | ConvertTo-Json -Depth 4) -Method Patch -ContentType 'application/json'
+        ]]
+        local pipe = io.popen("powershell -command -", "w")
+        pipe:write(script)
+        pipe:close()
+    end
+end
+
+function infokand(link,text)
+    text = [[
+        $webHookUrl = "]]..link..[["
+        $payload = @{
+            content = "]]..text..[["
+        }
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        Invoke-RestMethod -Uri $webHookUrl -Body ($payload | ConvertTo-Json -Depth 4) -Method Post -ContentType 'application/json'
+    ]]
+    local file = io.popen("powershell -command -", "w")
+    file:write(text)
+    file:close()
+end
+
+function webpack(link,id)
+    if setting.webhook.access then
+        local script = [[
+            $webHookUrl = "]]..link..[[/messages/]]..id..[["
+            $cpu = (Get-WmiObject win32_processor | Measure-Object -property LoadPercentage -Average | Select Average).Average
+            $ram = (Get-Counter '\Memory\Available MBytes').CounterSamples.CookedValue
+	    	$thumbnailObject = @{
+                url = "https://cdn.discordapp.com/attachments/1122342991705673840/1128335180789207040/1689081173833.jpg"
+            }
+            $footerObject = @{
+                text = "]].."Script made by BizzantiuM's | "..(os.date"%d/%m/%y":upper().." Time : ")..os.date("%I")..":"..os.date("%M").." "..os.date("%p"):upper()..[["
+            }
+            $fieldArray = @(
+                @{
+                    name = "<:gscan:1083907585607995463> | STORAGE WORLD"
+                    value = "]]..scanItem()..[["
+                    inline = "false"
+                }
+            )
+            $embedObject = @{
+                color = "]]..math.random(1111111,9999999)..[["
+                thumbnail = $thumbnailObject
+                footer = $footerObject
+                fields = $fieldArray
+            }
+            $embedArray = @($embedObject)
+            $payload = @{
+                embeds = $embedArray
+            }
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            Invoke-RestMethod -Uri $webHookUrl -Body ($payload | ConvertTo-Json -Depth 4) -Method Patch -ContentType 'application/json'
+        ]]
+        local pipe = io.popen("powershell -command -", "w")
+        pipe:write(script)
+        pipe:close()
+    end
+end
+
+function warp(world,id)
+    nuked = false
+    join = 0
+    bz = world
+    if door then
+        bz = bz .. "|" .. door
+    end
+    if getBot().world ~= string.upper(world) then
+        while getBot().world ~= world:upper() and not nuked do
+            sendPacket("action|join_request\nname|"..bz.."\ninvitedWorld|0",3)
+            sleep(setting.delay.warp)
+            if join == 50 then
+                print("World after : "..getBot().world.." is inacessible!, skipped world")
+                sleep(e)
+                infokand(setting.webhook.nuked,"```World after : "..getBot().world.." is inacessible!, skipped world``` @everyone")
+                sleep(e)
+                nuked = true
+            else
+                join = join + 1
+            end
+        end
+        sleep(1500)
+    end
+    if door and getBot().world == string.upper(world) then
+        local enter = 0
+        if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 and not nuked then
+            repeat
+            sendPacket("action|join_request\nname|" ..bz.."\ninvitedWorld|0", 3)
+            sleep(setting.delay.warp)
+            if enter >= 5 then
+				print("Wrong door id, terminated script")
+                sleep(e)
+                infokand(setting.webhook.nuked,"```Wrong door id, terminated script``` @everyone")
+                sleep(e)
+				error()
+			else
+				enter = enter + 1
+			end
+            until getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg ~= 6
+        end
+    end
+end
+
+function splitt(str, ptr)
+    if not ptr then 
+        ptr = "%s"
+    end
+    local tbl = {}
+    for string in string.gmatch(str, ptr) do
+        table.insert(tbl, string) 
+    end
+    return tbl
+end
+
+function reconnect(world,id,x,y)
+    if getBot().status ~= "online" then
+        infokand(setting.webhook.status,"```Bot : "..getBot().name.." status is "..getBot().status.." !``` @everyone")
+        sleep(e)
+        while getBot().status ~= "online" do
+            connect()
+            sleep(setting.delay.reconnect)
+        end
+        while getBot().world ~= world:upper() do
+            sendPacket("action|join_request\nname|"..world:upper().."\ninvitedWorld|0",3)
+            sleep(setting.delay.warp)
+        end
+        if id ~= "" then
+            if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 then
+                repeat
+                sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
+                sleep(setting.delay.warp)
+                until getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg ~= 6
+            end
+        end
+        if x and y then
+            while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
+                findPath(x,y)
+                sleep(e)
+            end
+        end
+        infokand(setting.webhook.status,"```Bot : "..getBot().name.." status is "..getBot().status.." !``` @everyone")
+        sleep(e)
+    end
+end
+
+function gscan(id)
+	local count = 0
+	for _, obj in pairs(getObjects()) do
+		if obj.id == id then
+			count = count + obj.count
+		end
+	end
+	return count
+end
+
+function buy(bz)
+	buying = 0
+    while findItem(112) >= setting.pack.mingems do
+        while getBot().slots < 36 do
+            sendPacket("action|buy\nitem|upgrade_backpack",2)
+            sleep(1000)
+        end
+        if findItem(112) > setting.pack.price then
+            sendPacket("action|buy\nitem|"..setting.pack.debug,2)
+            sleep(1000)
+            buying = buying + 1
+        else
+            break
+        end
+    end
+    storePack()
+end
+
+function storePack()
+    world = splitt(setting.storage.pack[indexx].world, "[^:]+")[1]
+    door = splitt(setting.storage.pack[indexx].world, "[^:]+")[2]
+    setJob("Storing pack")
+    sleep(e)
+    warp(world,door)
+    sleep(e)
+    webcuy("Storing Pack",webhook,messageid)
+    sleep(e)
+    for y,pack in pairs(setting.pack.packList) do
+        for i,tile in pairs(getTiles()) do
+            if setting.pack.separated then
+                if tile.fg == setting.patokan.pack or tile.bg == setting.patokan.pack then
+                    ::packzz::
+                    findPath(tile.x + (cTile - 1),tile.y-(y-1))
+                    sleep(1000)
+                    local count = 0
+                    reconnect(world,door,tile.x + (cTile - 1),tile.y-(y-1))
+                    while findItem(pack) > 0 do
+                        drop(pack)
+                        sleep(setting.delay.drop)
+                        reconnect(world,door,tile.x + (cTile - 1),tile.y-(y-1))
+                        count = count + 1
+                        if count >= 2 then
+                            cTile = cTile + 1
+                            goto packzz
+                        end
+                    end
+                end
+                if findItem(pack) == 0 then
+                    break
+                end
+            else
+                if tile.fg == setting.patokan.pack or tile.bg == setting.patokan.pack then
+                    ::packz::
+                    findPath(tile.x + (cTile - 1),tile.y)
+                    sleep(1000)
+                    local count = 0
+                    reconnect(world,door,tile.x + (cTile - 1),tile.y)
+                    while findItem(pack) > 0 do
+                        drop(pack)
+                        sleep(setting.delay.drop)
+                        reconnect(world,door,tile.x + (cTile - 1),tile.y)
+                        count = count + 1
+                        if count >= 2 then
+                            cTile = cTile + 1
+                            goto packz
+                        end
+                    end
+                end
+                if findItem(pack) == 0 then
+                    break
+                end
+            end
+        end
+    end
+    webpack(setting.webhook.pack.link,setting.webhook.pack.messageid)
+	sleep(e)
+    setJob(setting.typeMode)
+    sleep(e)
+end
+
+function scanTree(id)
+    local count = 0
+    for _, tile in pairs(getTiles()) do
+        if tile.fg == id and not tile.ready then
+            count = count + 1
+        end
+    end
+    return count
+end
+
+function scanTrees(id)
+    local count = 0
+    for _, tile in pairs(getTiles()) do
+        if tile.fg == id and tile.ready then
+            count = count + 1
+        end
+    end
+    return count
+end	
+
+function dropwir(bz)
+    world = splitt(setting.storage.block[indexx].world,'[^:]+')[1]
+    door = splitt(setting.storage.block[indexx].world,'[^:]+')[2]
+    setJob('Storing block')
+    sleep(e)
+    warp(world,door)
+    webcuy("Storing items",webhook,messageid)
+    sleep(e)
+    for i,tile in pairs(getTiles()) do
+        if tile.bg == setting.patokan.block or tile.fg == setting.patokan.block then
+            ::back::
+            findPath(tile.x + (iTile - 1),tile.y)
+            sleep(1000)
+            local count = 0
+            reconnect(world,door,tile.x + (iTile - 1),tile.y)
+            while findItem(setting.item.block) > 0 do
+                drop(setting.item.block)
+                sleep(setting.delay.drop)
+                reconnect(world,door,tile.x + (iTile - 1),tile.y)
+                count = count + 1
+                if count >= 2 then
+                    iTile = iTile + 1
+                    goto back
+                end
+            end
+        end
+        if findItem(setting.item.block) == 0 then
+            break
+        end
+    end
+    webpack(setting.webhook.block.link,setting.webhook.block.messageid)
+	sleep(e)
+    setJob(setting.typeMode)
+    sleep(e)
+end
+
+function dropwirs(bz)
+    world = splitt(setting.storage.seed[indexx].world, "[^:]+")[1]
+    door = splitt(setting.storage.seed[indexx].world, "[^:]+")[2]
+    setJob("Storing seed")
+    sleep(e)
+    warp(world,door)
+    sleep(e)
+    webcuy("Storing items",webhook,messageid)
+    sleep(e)
+	for i,tile in pairs(getTiles()) do
+        if tile.bg == setting.patokan.seed or tile.fg == setting.patokan.seed then
+            ::wirs::
+            findPath(tile.x + (bTile - 1),tile.y)
+            sleep(1000)
+            local count = 0
+            reconnect(world,door,tile.x + (bTile - 1),tile.y)
+            while findItem(setting.item.seed) > 0 do
+                drop(setting.item.seed)
+                sleep(setting.delay.drop)
+                reconnect(world,door,tile.x + (bTile - 1),tile.y)
+                count = count + 1
+                if count >= 2 then
+                    bTile = bTile + 1
+                    goto wirs
+                end
+            end
+        end
+        if findItem(setting.item.seed) == 0 then
+            break
+        end
+    end
+    webpack(setting.webhook.seed.link,setting.webhook.seed.messageid)
+	sleep(e)
+    setJob(setting.typeMode)
+    sleep(e)
+end	
+
+function harvestOrCollect(bz)
+    if setting.mode.ignoregems then
+        setBool("Ignore Gems", true)
+        sleep(e)
+        collectSet(true,setting.mode.range)
+        sleep(e)
+    else
+        collectSet(true,setting.mode.range)
+        sleep(e)
+    end
+    webcuy("Doing task, mode : "..setting.typeMode.."",webhook,messageid)
+    sleep(100)
+    if setting.typeMode == "harvest" then
+        if mode == "up" then
+            t1 = 99
+            t2 = 0
+            t3 = -1
+            tiles = 0
+            for y = -1, 53 do
+                for x = t1, t2, t3 do
+                    if getTile(x,y).fg == setting.item.seed and getTile(x,y).ready then
+                        if findItem(setting.item.block) >= 180 then
+                            collectSet(false)
+                            sleep(e)
+                            dropwir(bz)
+                            sleep(e)
+                            door = idList
+                            warp(bz,door)
+                            sleep(e)
+                            if setting.mode.ignoregems then
+                                setBool("Ignore Gems", true)
+                                sleep(e)
+                                collectSet(true,setting.mode.range)
+                                sleep(e)
+                            else
+                                collectSet(true,setting.mode.range)
+                                sleep(e)
+                            end
+                            webcuy("Doing task, mode : "..setting.typeMode.."",webhook,messageid)
+                            sleep(100)
+                        elseif findItem(setting.item.seed) > 50 then
+                            collectSet(false)
+                            sleep(e)
+                            dropwirs(bz)
+                            sleep(e)
+                            door = idList
+                            warp(bz,door)
+                            sleep(e)
+                            if setting.mode.ignoregems then
+                                setBool("Ignore Gems", true)
+                                sleep(e)
+                                collectSet(true,setting.mode.range)
+                                sleep(e)
+                            else
+                                collectSet(true,setting.mode.range)
+                                sleep(e)
+                            end
+                            webcuy("Doing task, mode : "..setting.typeMode.."",webhook,messageid)
+                            sleep(100)
+                        elseif findItem(112) >= setting.pack.mingems then
+                            collectSet(false)
+                            sleep(e)
+                            buy(bz)
+                            sleep(e)
+                            door = idList
+                            warp(bz,door)
+                            sleep(e)
+                            if setting.mode.ignoregems then
+                                setBool("Ignore Gems", true)
+                                sleep(e)
+                                collectSet(true,setting.mode.range)
+                                sleep(e)
+                            else
+                                collectSet(true,setting.mode.range)
+                                sleep(e)
+                            end
+                            webcuy("Doing task, mode : "..setting.typeMode.."",webhook,messageid)
+                            sleep(100)
+                        end
+                        findPath(x,y)
+                        while getTile(x,y).fg == setting.item.seed do
+                            punch(0,0)
+                            sleep(setting.delay.harvest)
+                            door = idList
+                            reconnect(bz,door,x,y)
+                        end
+                    end
+                end
+                if tiles == 1 then
+                    if t1 == 0 then
+                        t1 = 99
+                        t2 = 0
+                        t3 = -1
+                        tiles = 0
+                    elseif t1 == 99 then
+                        t1 = 0
+                        t2 = 99
+                        t3 = 1
+                        tiles = 0
+                    end
+                elseif tiles == 0 then
+                    tiles = tiles + 1
+                end
+            end
+        elseif mode == "down" then
+            t1 = 99
+            t2 = 0
+            t3 = -1
+            tiles = 0
+            for y = 53, 0, -1 do
+                for x = t1, t2, t3 do
+                    if getTile(x,y).fg == setting.item.seed and getTile(x,y).ready then
+                        if findItem(setting.item.block) >= 180 then
+                            collectSet(false)
+                            sleep(e)
+                            dropwir(bz)
+                            sleep(e)
+                            door = idList
+                            warp(bz,door)
+                            sleep(e)
+                            if setting.mode.ignoregems then
+                                setBool("Ignore Gems", true)
+                                sleep(e)
+                                collectSet(true,setting.mode.range)
+                                sleep(e)
+                            else
+                                collectSet(true,setting.mode.range)
+                                sleep(e)
+                            end
+                            webcuy("Doing task, mode : "..setting.typeMode.."",webhook,messageid)
+                            sleep(100)
+                        elseif findItem(setting.item.seed) > 50 then
+                            collectSet(false)
+                            sleep(e)
+                            dropwirs(bz)
+                            sleep(e)
+                            door = idList
+                            warp(bz,door)
+                            sleep(e)
+                            if setting.mode.ignoregems then
+                                setBool("Ignore Gems", true)
+                                sleep(e)
+                                collectSet(true,setting.mode.range)
+                                sleep(e)
+                            else
+                                collectSet(true,setting.mode.range)
+                                sleep(e)
+                            end
+                            webcuy("Doing task, mode : "..setting.typeMode.."",webhook,messageid)
+                            sleep(100)
+                        elseif findItem(112) >= setting.pack.mingems then
+                            collectSet(false)
+                            sleep(e)
+                            buy(bz)
+                            sleep(e)
+                            door = idList
+                            warp(bz,door)
+                            sleep(e)
+                            if setting.mode.ignoregems then
+                                setBool("Ignore Gems", true)
+                                sleep(e)
+                                collectSet(true,setting.mode.range)
+                                sleep(e)
+                            else
+                                collectSet(true,setting.mode.range)
+                                sleep(e)
+                            end
+                            webcuy("Doing task, mode : "..setting.typeMode.."",webhook,messageid)
+                            sleep(100)
+                        end
+                        findPath(x,y)
+                        while getTile(x,y).fg == setting.item.seed do
+                            punch(0,0)
+                            sleep(setting.delay.harvest)
+                            door = idList
+                            reconnect(bz,door,x,y)
+                        end
+                    end
+                end
+                if tiles == 1 then
+                    if t1 == 0 then
+                        t1 = 99
+                        t2 = 0
+                        t3 = -1
+                        tiles = 0
+                    elseif t1 == 99 then
+                        t1 = 0
+                        t2 = 99
+                        t3 = 1
+                        tiles = 0
+                    end
+                elseif tiles == 0 then
+                    tiles = tiles + 1
+                end
+            end
+        end
+    elseif setting.typeMode == "collect" then
+        for _, obj in pairs(getObjects()) do
+            if obj.id == setting.item.block then
+                if gscan(setting.item.block) < 1 then
+                    break
+                end
+                findPath(round(obj.x / 32),math.floor(obj.y / 32))
+                sleep(setting.delay.collect)
+            end
+            if findItem(setting.item.block) >= 180 then
+                collectSet(false)
+                sleep(e)
+                dropwir(bz)
+                sleep(e)
+                door = idList
+                warp(bz,door)
+                sleep(e)
+                if setting.mode.ignoregems then
+                    setBool("Ignore Gems", true)
+                    sleep(e)
+                    collectSet(true,setting.mode.range)
+                    sleep(e)
+                else
+                    collectSet(true,setting.mode.range)
+                    sleep(e)
+                end
+                webcuy("Doing task, mode : "..setting.typeMode.."",webhook,messageid)
+                sleep(100)
+            elseif findItem(setting.item.seed) > 50 then
+                collectSet(false)
+                sleep(e)
+                dropwirs(bz)
+                sleep(e)
+                door = idList
+                warp(bz,door)
+                sleep(e)
+                if setting.mode.ignoregems then
+                    setBool("Ignore Gems", true)
+                    sleep(e)
+                    collectSet(true,setting.mode.range)
+                    sleep(e)
+                else
+                    collectSet(true,setting.mode.range)
+                    sleep(e)
+                end
+                webcuy("Doing task, mode : "..setting.typeMode.."",webhook,messageid)
+                sleep(100)
+            elseif findItem(112) >= setting.pack.mingems then
+                collectSet(false)
+                sleep(e)
+                buy(bz)
+                sleep(e)
+                door = idList
+                warp(bz,door)
+                sleep(e)
+                if setting.mode.ignoregems then
+                    setBool("Ignore Gems", true)
+                    sleep(e)
+                    collectSet(true,setting.mode.range)
+                    sleep(e)
+                else
+                    collectSet(true,setting.mode.range)
+                    sleep(e)
+                end
+                webcuy("Doing task, mode : "..setting.typeMode.."",webhook,messageid)
+                sleep(100)
+            end
+        end
+    end
+end
+
+if BizzantiuM.version == "1.0" and BizzantiuM.maker == "akbarsht" then
+    for i, moy in ipairs(farmList) do
+        door = idList
+        setJob(setting.typeMode)
+        sleep(e)
+        warp(moy,door)
+        sleep(e)
+        harvestOrCollect(moy)
+    end
+end
+print("ALREADY FINISHED ALL WORLD MODE, Terminated script ! ")
+webcuy("ALREADY FINISHED ALL WORLD MODE : "..setting.typeMode.." ! Removing BOT @everyone",webhook,messageid)
+sleep(e)
+if setting.mode.removeBot then
+    removeBot(getBot().name)
+    sleep(e)
+end
+error()
