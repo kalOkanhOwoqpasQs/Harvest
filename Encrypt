@@ -285,26 +285,26 @@ function buy(worlds)
 end
 
 function storePack()
-    for y,pack in pairs(setting.pack.packList) do
-        for i = packkk , #setting.storage.pack.world do
-            setJob('Storing Packs')
-            door = setting.storage.pack.door
-            warp(setting.storage.pack.world[i],door)
-            webcuy('Storing packs',task,messageid)
-            if gscan(pack) >= setting.storage.pack.limit then
-                infokand(setting.webhook.status,'[ ||'..getBot().world..'|| ] Has reached limit, skipped world')
-                packkk = packkk + 1
-                if packkk > #setting.storage.pack.world then
-                    infokand(setting.webhook.status,"ALL STORAGE IS REACHED LIMIT !!! @everyone")
-                    if setting.mode.removeBot then
-						removeBot(getBot().name)
-						sleep(100)
-					end
-					error()
+    for i = packkk , #setting.storage.pack.world do
+        setJob('Storing packs')
+        door = setting.storage.pack.door
+        warp(setting.storage.pack.world[i],door)
+        webcuy('Storing packs',task,messageid)
+        if gscan(setting.pack.packList[1]) >= setting.storage.pack.limit then
+            infokand(setting.webhook.status,'[ ||'..getBot().world..'|| ] Has reached limit, skipped world')
+            packkk = packkk + 1
+            if packkk > #setting.storage.pack.world then
+                infokand(setting.webhook.status,"ALL STORAGE IS REACHED LIMIT !!! @everyone")
+                if setting.mode.removeBot then
+                    removeBot(getBot().name)
+                    sleep(100)
                 end
-            else
-                if setting.mode.separated then
-                    for i,tile in pairs(getTiles()) do
+                error()
+            end
+        else
+            for y,pack in pairs(setting.pack.packList) do
+                for i,tile in pairs(getTiles()) do
+                    if setting.mode.separated then
                         if tile.fg == 0 or tile.bg == 0 then
                             ::packzz::
                             findPath(kiw + (cTile - 1),wirs - (y-1))
@@ -325,11 +325,7 @@ function storePack()
                         if findItem(pack) == 0 then
                             break
                         end
-                    end
-                    sleep(100)
-                    break
-                else
-                    for i,tile in pairs(getTiles()) do
+                    else
                         if tile.fg == 0 or tile.bg == 0 then
                             ::packz::
                             findPath(kiw + (cTile - 1),wirs)
@@ -351,10 +347,10 @@ function storePack()
                             break
                         end
                     end
-                    sleep(100)
-                    break
                 end
             end
+            sleep(100)
+            break
         end
     end
     webpack(setting.webhook.pack.link,setting.webhook.pack.messageid)
@@ -362,27 +358,28 @@ function storePack()
     setJob(setting.typeMode)
 end
 
+
 function spevent(worlds)
-    for y,items in pairs(setting.item.event) do
-        for i = eventt , #setting.storage.event.world do
-            setJob('Storing special items')
-            door = setting.storage.event.door
-            warp(setting.storage.event.world[i],door)
-            webcuy('Storing special items',task,messageid)
-            if gscan(items) >= setting.storage.event.limit then
-                infokand(setting.webhook.status,'[ ||'..getBot().world..'|| ] Has reached limit, skipped world')
-                eventt = eventt + 1
-                if eventt > #setting.storage.event.world then
-                    infokand(setting.webhook.status,"ALL STORAGE IS REACHED LIMIT !!! @everyone")
-                    if setting.mode.removeBot then
-						removeBot(getBot().name)
-						sleep(100)
-					end
-					error()
+    for i = eventt , #setting.storage.event.world do
+        setJob('Storing special items')
+        door = setting.storage.event.door
+        warp(setting.storage.event.world[i],door)
+        webcuy('Storing special items',task,messageid)
+        if gscan(setting.item.event[1]) >= setting.storage.event.limit then
+            infokand(setting.webhook.status,'[ ||'..getBot().world..'|| ] Has reached limit, skipped world')
+            eventt = eventt + 1
+            if eventt > #setting.storage.event.world then
+                infokand(setting.webhook.status,"ALL STORAGE IS REACHED LIMIT !!! @everyone")
+                if setting.mode.removeBot then
+                    removeBot(getBot().name)
+                    sleep(100)
                 end
-            else
-                if setting.mode.separated then
-                    for i,tile in pairs(getTiles()) do
+                error()
+            end
+        else
+            for y,items in pairs(setting.item.event) do
+                for i,tile in pairs(getTiles()) do
+                    if setting.mode.separated then
                         if tile.fg == 0 or tile.bg == 0 then
                             ::iye::
                             findPath(bar + (dTile - 1),nich - (y-1))
@@ -403,11 +400,7 @@ function spevent(worlds)
                         if findItem(items) == 0 then
                             break
                         end
-                    end
-                    sleep(100)
-                    break
-                else
-                    for i,tile in pairs(getTiles()) do
+                    else
                         if tile.fg == 0 or tile.bg == 0 then
                             ::alamaks::
                             findPath(bar + (dTile - 1),nich)
@@ -429,10 +422,10 @@ function spevent(worlds)
                             break
                         end
                     end
-                    sleep(100)
-                    break
                 end
             end
+            sleep(100)
+            break
         end
     end
     webpack(setting.webhook.event.link,setting.webhook.event.messageid)
@@ -500,9 +493,9 @@ function dropwir(worlds)
                     break
                 end
             end
-            sleep(100)
-            break
         end
+        sleep(100)
+        break
     end
     webpack(setting.webhook.block.link,setting.webhook.block.messageid)
     sleep(150)
@@ -577,7 +570,27 @@ function harvestOrCollect(worlds)
             for y = -1, 53 do
                 for x = t1, t2, t3 do
                     if getTile(x,y).fg == setting.item.seed and getTile(x,y).ready then
-                        if findItem(setting.item.block) >= 180 then
+                        if findItem(setting.item.support.items) == 0 then
+                            if setting.item.support.access then
+                                collectSet(false)
+                                pikex(worlds)
+                                sleep(100)
+                                door = idList
+                                warp(worlds,door)
+                                sleep(150)
+                                if setting.mode.ignoregems then
+                                    setBool('Ignore Gems', true)
+                                    sleep(150)
+                                    collectSet(true,setting.mode.range)
+                                    sleep(150)
+                                else
+                                    collectSet(true,setting.mode.range)
+                                    sleep(150)
+                                end
+                                webcuy('Harvest mode : '..mode..'',task,messageid)
+                                sleep(100)
+                            end
+                        elseif findItem(setting.item.block) >= 180 then
                             collectSet(false)
                             sleep(150)
                             dropwir(worlds)
@@ -683,7 +696,27 @@ function harvestOrCollect(worlds)
             for y = 53, 0, -1 do
                 for x = t1, t2, t3 do
                     if getTile(x,y).fg == setting.item.seed and getTile(x,y).ready then
-                        if findItem(setting.item.block) >= 180 then
+                        if findItem(setting.item.support.items) == 0 then
+                            if setting.item.support.access then
+                                collectSet(false)
+                                pikex(worlds)
+                                sleep(100)
+                                door = idList
+                                warp(worlds,door)
+                                sleep(150)
+                                if setting.mode.ignoregems then
+                                    setBool('Ignore Gems', true)
+                                    sleep(150)
+                                    collectSet(true,setting.mode.range)
+                                    sleep(150)
+                                else
+                                    collectSet(true,setting.mode.range)
+                                    sleep(150)
+                                end
+                                webcuy('Harvest mode : '..mode..'',task,messageid)
+                                sleep(100)
+                            end
+                        elseif findItem(setting.item.block) >= 180 then
                             collectSet(false)
                             sleep(150)
                             dropwir(worlds)
@@ -704,7 +737,7 @@ function harvestOrCollect(worlds)
                         elseif findItem(setting.item.event[1]) >= setting.item.amount then
                             collectSet(false)
                             sleep(150)
-                            spevent(worlds)
+                            spevent()
                             door = idList
                             warp(worlds,door)
                             sleep(150)
@@ -814,7 +847,7 @@ function harvestOrCollect(worlds)
             elseif findItem(setting.item.event[1]) >= setting.item.amount then
                 collectSet(false)
                 sleep(150)
-                spevent(worlds)
+                spevent()
                 door = idList
                 warp(worlds,door)
                 sleep(150)
@@ -870,23 +903,58 @@ function harvestOrCollect(worlds)
     end
 end
 
+function pikex(worlds)
+    setJob("Take support items")
+    sleep(100)
+    door = setting.item.support.door
+    warp(setting.item.support.world,door)
+    sleep(100)
+    webcuy('Taking support items',task,messageid)
+    while findItem(setting.item.support.items) == 0 do
+        for _, obj in pairs(getObjects()) do
+            if obj.id == setting.item.support.items then
+                findPath(math.floor(obj.x / 32),math.floor(obj.y / 32))
+                sleep(200)
+                collect(1)
+                sleep(500)
+            end
+            if findItem(setting.item.support.items) > 0 then
+                break
+            end
+        end
+        move(-1,0)
+        sleep(1000)
+        wear(setting.item.support.items)
+        sleep(2000)
+        sendPacket("action|drop\n|itemID|"..setting.item.support.items.."",2)
+        sleep(2000)
+        sendPacket("action|dialog_return\ndialog_name|drop_item\nitemID|"..setting.item.support.items.."|\ncount|"..(findItem(setting.item.support.items) - setting.item.support.keep),2)
+        sleep(2000)
+    end
+end
+
 if BizzantiuM.version == '1.2' and BizzantiuM.maker == 'akbarsht' then
     for i = startfrom,#farmList do
         door = idList
         setJob("Harvest")
+        webcuy('Running script type : '..setting.typeMode..'',task,messageid)
         warp(farmList[i],door)
         if not nuked then
-            webcuy('Running script type : '..setting.typeMode..'',task,messageid)
-            
-            harvestOrCollect(farmList[i])
-			wirz[farmList[i]] = "```"..alamak(os.difftime(os.time(),st)).."```"
-		else
-			wirz[farmList[i]] = 'NUKED'
+            if not wrong then
+                harvestOrCollect(farmList[i])
+                wirz[farmList[i]] = "```"..alamak(os.difftime(os.time(),st)).."```"
+            else
+                wirz[farmList[i]] = 'WRONG DOOR ID'
+                wrong = false
+                sleep(5000)
+            end
+        else
+            wirz[farmList[i]] = 'NUKED'
             nuked = false
-            sleep(2500)
-		end
+            sleep(5000)
+        end
     end
-end
+end    
 print('ALREADY FINISHED ALL WORLD, Terminated script ! ')
 webcuy('ALREADY FINISHED ALL WORLD !! @everyone',task,messageid)
 sleep(150)
@@ -894,4 +962,4 @@ if setting.mode.removeBot then
     removeBot(getBot().name)
     sleep(150)
 end
-error()
+error() 
