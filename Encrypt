@@ -184,7 +184,6 @@ end
 
 
 function warp(world,id)
-    nuked = false
 	join = 0
     bz = world
     if door then
@@ -196,9 +195,9 @@ function warp(world,id)
             sleep(setting.delay.warp)
             if join == 50 then
                 print("World after : "..getBot().world.." is inacessible!, skipped world")
-                sleep(e)
+                sleep(100)
                 infokand(setting.webhook.nuked,"```World after : "..getBot().world.." is inacessible``` @everyone")
-                sleep(e)
+                sleep(100)
                 nuked = true
             else
                 join = join + 1
@@ -214,9 +213,9 @@ function warp(world,id)
             sleep(setting.delay.warp)
             if enter >= 5 then
 				print("Wrong door id, terminated script")
-                sleep(e)
+                sleep(100)
                 infokand(setting.webhook.nuked,"```Wrong door id, terminated script``` @everyone")
-                sleep(e)
+                sleep(100)
 				error()
 			else
 				enter = enter + 1
