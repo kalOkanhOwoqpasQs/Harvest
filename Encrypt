@@ -493,9 +493,9 @@ function dropwir(worlds)
                     break
                 end
             end
+            sleep(100)
+            break
         end
-        sleep(100)
-        break
     end
     webpack(setting.webhook.block.link,setting.webhook.block.messageid)
     sleep(150)
@@ -570,7 +570,25 @@ function harvestOrCollect(worlds)
             for y = -1, 53 do
                 for x = t1, t2, t3 do
                     if getTile(x,y).fg == setting.item.seed and getTile(x,y).ready then
-                        if findItem(setting.item.support.items) == 0 then
+                        if findItem(setting.item.block) >= 180 then
+                            collectSet(false)
+                            sleep(150)
+                            dropwir(worlds)
+                            door = idList
+                            warp(worlds,door)
+                            sleep(150)
+                            if setting.mode.ignoregems then
+                                setBool('Ignore Gems', true)
+                                sleep(150)
+                                collectSet(true,setting.mode.range)
+                                sleep(150)
+                            else
+                                collectSet(true,setting.mode.range)
+                                sleep(150)
+                            end
+                            webcuy('Harvest mode : '..mode..'',task,messageid)
+                            sleep(100)
+                        elseif findItem(setting.item.support.items) == 0 then
                             if setting.item.support.access then
                                 collectSet(false)
                                 pikex(worlds)
@@ -590,24 +608,6 @@ function harvestOrCollect(worlds)
                                 webcuy('Harvest mode : '..mode..'',task,messageid)
                                 sleep(100)
                             end
-                        elseif findItem(setting.item.block) >= 180 then
-                            collectSet(false)
-                            sleep(150)
-                            dropwir(worlds)
-                            door = idList
-                            warp(worlds,door)
-                            sleep(150)
-                            if setting.mode.ignoregems then
-                                setBool('Ignore Gems', true)
-                                sleep(150)
-                                collectSet(true,setting.mode.range)
-                                sleep(150)
-                            else
-                                collectSet(true,setting.mode.range)
-                                sleep(150)
-                            end
-                            webcuy('Harvest mode : '..mode..'',task,messageid)
-                            sleep(100)
                         elseif findItem(setting.item.event[1]) >= setting.item.amount then
                             collectSet(false)
                             sleep(150)
@@ -696,7 +696,25 @@ function harvestOrCollect(worlds)
             for y = 53, 0, -1 do
                 for x = t1, t2, t3 do
                     if getTile(x,y).fg == setting.item.seed and getTile(x,y).ready then
-                        if findItem(setting.item.support.items) == 0 then
+                        if findItem(setting.item.block) >= 180 then
+                            collectSet(false)
+                            sleep(150)
+                            dropwir(worlds)
+                            door = idList
+                            warp(worlds,door)
+                            sleep(150)
+                            if setting.mode.ignoregems then
+                                setBool('Ignore Gems', true)
+                                sleep(150)
+                                collectSet(true,setting.mode.range)
+                                sleep(150)
+                            else
+                                collectSet(true,setting.mode.range)
+                                sleep(150)
+                            end
+                            webcuy('Harvest mode : '..mode..'',task,messageid)
+                            sleep(100)
+                        elseif findItem(setting.item.support.items) == 0 then
                             if setting.item.support.access then
                                 collectSet(false)
                                 pikex(worlds)
@@ -716,24 +734,6 @@ function harvestOrCollect(worlds)
                                 webcuy('Harvest mode : '..mode..'',task,messageid)
                                 sleep(100)
                             end
-                        elseif findItem(setting.item.block) >= 180 then
-                            collectSet(false)
-                            sleep(150)
-                            dropwir(worlds)
-                            door = idList
-                            warp(worlds,door)
-                            sleep(150)
-                            if setting.mode.ignoregems then
-                                setBool('Ignore Gems', true)
-                                sleep(150)
-                                collectSet(true,setting.mode.range)
-                                sleep(150)
-                            else
-                                collectSet(true,setting.mode.range)
-                                sleep(150)
-                            end
-                            webcuy('Harvest mode : '..mode..'',task,messageid)
-                            sleep(100)
                         elseif findItem(setting.item.event[1]) >= setting.item.amount then
                             collectSet(false)
                             sleep(150)
@@ -844,6 +844,26 @@ function harvestOrCollect(worlds)
                 end
                 webcuy('Collecting',task,messageid)
                 sleep(100)
+            elseif findItem(setting.item.support.items) == 0 then
+                if setting.item.support.access then
+                    collectSet(false)
+                    pikex(worlds)
+                    sleep(100)
+                    door = idList
+                    warp(worlds,door)
+                    sleep(150)
+                    if setting.mode.ignoregems then
+                        setBool('Ignore Gems', true)
+                        sleep(150)
+                        collectSet(true,setting.mode.range)
+                        sleep(150)
+                    else
+                        collectSet(true,setting.mode.range)
+                        sleep(150)
+                    end
+                    webcuy('Harvest mode : '..mode..'',task,messageid)
+                    sleep(100)
+                end
             elseif findItem(setting.item.event[1]) >= setting.item.amount then
                 collectSet(false)
                 sleep(150)
