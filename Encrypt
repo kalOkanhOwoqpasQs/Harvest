@@ -746,7 +746,6 @@ function cektree(worlds)
         end
     end
     xTile = 0
-    collecting(worlds)
 end
                 
 
@@ -1194,6 +1193,7 @@ if BizzantiuM.version == '1.3' and BizzantiuM.maker == 'akbarsht' then
                 if setting.typeMode == 'harvest' then
                     harvest(farmList[i])
                     cektree(farmList[i])
+                    collecting(farmList[i])
                     kelaz[farmList[i]] = "```"..alamak(os.difftime(os.time(),st)).."```"
                 elseif setting.typeMode == 'collect' then
                     collecting(farmList[i])
