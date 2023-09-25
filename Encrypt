@@ -366,9 +366,7 @@ function storePack()
                                 cTile = 0
                             end
                             while findItem(pack) > 0 do
-                                sendPacket("action|drop\n|itemID|"..pack,2)
-                                sleep(setting.delay.drop)
-                                sendPacket("action|dialog_return\ndialog_name|drop_item\nitemID|"..pack.."|\ncount|"..findItem(pack),2)
+                                drop(pack)
                                 sleep(setting.delay.drop)
                                 reconnect(world,door,kiw + (cTile - 1),wirs - (y-1))
                                 count = count + 1
@@ -393,9 +391,7 @@ function storePack()
                                 cTile = 0
                             end
                             while findItem(pack) > 0 do
-                                sendPacket("action|drop\n|itemID|"..pack,2)
-                                sleep(setting.delay.drop)
-                                sendPacket("action|dialog_return\ndialog_name|drop_item\nitemID|"..pack.."|\ncount|"..findItem(pack),2)
+                                drop(pack)
                                 sleep(setting.delay.drop)
                                 reconnect(world,door,kiw + (cTile),wirs)
                                 count = count + 1
@@ -454,9 +450,7 @@ function spevent(worlds)
                                 dTile = 0
                             end
                             while findItem(items) > 0 do
-                                sendPacket("action|drop\n|itemID|"..items,2)
-                                sleep(setting.delay.drop)
-                                sendPacket("action|dialog_return\ndialog_name|drop_item\nitemID|"..items.."|\ncount|"..findItem(items),2)
+                                drop(items)
                                 sleep(setting.delay.drop)
                                 reconnect(world,door,bar + (dTile - 1),nich - (y-1))
                                 count = count + 1
@@ -481,9 +475,7 @@ function spevent(worlds)
                                 dTile = 0
                             end
                             while findItem(items) > 0 do
-                                sendPacket("action|drop\n|itemID|"..items,2)
-                                sleep(setting.delay.drop)
-                                sendPacket("action|dialog_return\ndialog_name|drop_item\nitemID|"..items.."|\ncount|"..findItem(items),2)
+                                drop(items)
                                 sleep(setting.delay.drop)
                                 reconnect(world,door,bar + (dTile),nich)
                                 count = count + 1
@@ -559,10 +551,8 @@ function dropwir(worlds)
                         iTile = 0
                     end
                     while findItem(setting.item.block) > 0 do
-                        sendPacket("action|drop\n|itemID|"..setting.item.block,2)
+                        drop(setting.item.block)
                         sleep(setting.delay.drop)
-                        sendPacket("action|dialog_return\ndialog_name|drop_item\nitemID|"..setting.item.block.."|\ncount|100",2)
-                        sleep(settin.delay.drop)
                         reconnect(world,door,mang + (iTile),eak)
                         count = count + 1
                         if count >= 2 then
@@ -615,10 +605,8 @@ function dropwirs(worlds)
                         iTile = 0
                     end
                     while findItem(setting.item.seed) > 0 do
-                        sendPacket("action|drop\n|itemID|"..setting.item.block,2)
+                        drop(setting.item.seed)
                         sleep(setting.delay.drop)
-                        sendPacket("action|dialog_return\ndialog_name|drop_item\nitemID|"..setting.item.block.."|\ncount|100",2)
-                        sleep(settin.delay.drop)
                         reconnect(world,door,ak + (bTile),wir)
                         count = count + 1
                         if count >= 2 then
