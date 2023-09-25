@@ -746,6 +746,7 @@ function cektree(worlds)
         end
     end
     xTile = 0
+    collecting(worlds)
 end
                 
 
@@ -1044,7 +1045,7 @@ function harvest(worlds)
     pTile = 0
 end
 
-function collect(worlds)
+function collecting(worlds)
     webcuy("Collecting",webhook,message)
     for _, obj in pairs(getObjects()) do
         if obj.id == setting.item.block then
@@ -1193,10 +1194,9 @@ if BizzantiuM.version == '1.3' and BizzantiuM.maker == 'akbarsht' then
                 if setting.typeMode == 'harvest' then
                     harvest(farmList[i])
                     cektree(farmList[i])
-                    collect(farmList[i])
                     kelaz[farmList[i]] = "```"..alamak(os.difftime(os.time(),st)).."```"
                 elseif setting.typeMode == 'collect' then
-                    collect(farmList[i])
+                    collecting(farmList[i])
                 end
             else
                 kelaz[farmList[i]] = 'WRONG DOOR ID'
