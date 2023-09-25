@@ -870,9 +870,8 @@ function collecting(worlds)
         if obj.id == setting.item.block then
             findPath(round(obj.x / 32),math.floor(obj.y / 32))
             sleep(setting.delay.collect)
+            collect(setting.mode.range)
         end
-        collect(setting.mode.range)
-        sleep(25)
         if findItem(setting.item.support.items) == 0 then
             if setting.item.support.access then
                 pikex(worlds)
