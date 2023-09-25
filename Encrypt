@@ -361,7 +361,7 @@ function storePack()
                             sleep(1000)
                             local count = 0
                             reconnect(world,door,kiw + (cTile),wirs - (y-1))
-                            if kiw + (cTile) >= 15 then
+                            if kiw + (cTile) >= 98 then
                                 wirs = wirs - 1
                                 cTile = 0
                             end
@@ -386,7 +386,7 @@ function storePack()
                             sleep(1000)
                             local count = 0
                             reconnect(world,door,kiw + (cTile),wirs)
-                            if kiw + (cTile) >= 15 then
+                            if kiw + (cTile) >= 98 then
                                 wirs = wirs - 1
                                 cTile = 0
                             end
@@ -445,7 +445,7 @@ function spevent(worlds)
                             sleep(1000)
                             local count = 0
                             reconnect(world,door,bar + (dTile),nich - (y-1))
-                            if bar + (dTile) >= 15 then
+                            if bar + (dTile) >= 98 then
                                 nich = nich - 1
                                 dTile = 0
                             end
@@ -470,7 +470,7 @@ function spevent(worlds)
                             sleep(1000)
                             local count = 0
                             reconnect(world,door,bar + (dTile),nich)
-                            if bar + (dTile) >= 15 then
+                            if bar + (dTile) >= 98 then
                                 nich = nich - 1
                                 dTile = 0
                             end
@@ -546,7 +546,7 @@ function dropwir(worlds)
                     sleep(1000)
                     local count = 0
                     reconnect(world,door,mang + (iTile),eak)
-                    if mang + (iTile) >= 15 then
+                    if mang + (iTile) >= 98 then
                         eak = eak - 1
                         iTile = 0
                     end
@@ -600,7 +600,7 @@ function dropwirs(worlds)
                     sleep(1000)
                     local count = 0
                     reconnect(world,door,ak + (bTile),wir)
-                    if ak + (bTile) >= 15 then
+                    if ak + (bTile) >= 98 then
                         wir = wir - 1
                         iTile = 0
                     end
