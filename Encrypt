@@ -245,7 +245,7 @@ function warp(world,id)
         while getBot().world ~= world:upper() and not nuked do
             sendPacket("action|join_request\nname|"..bz.."\ninvitedWorld|0",3)
             sleep(setting.delay.warp)
-            if join == 50 then
+            if join == 15 then
                 print("World after : "..getBot().world.." is inacessible!, skipped world")
                 sleep(100)
                 infokand(setting.webhook.status,"World after : ||"..getBot().world.."|| is inacessible @everyone")
@@ -635,21 +635,10 @@ function cektree(worlds)
                 ::BACK::
                 if findItem(setting.item.support.items) == 0 then
                     if setting.item.support.access then
-                        collectSet(false)
                         pikex(worlds)
                         sleep(100)
                         door = idList
                         warp(worlds,door)
-                        sleep(150)
-                        if setting.mode.ignoregems then
-                            setBool('Ignore Gems', true)
-                            sleep(150)
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        else
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        end
                         sleep(100)
                     end
                 end
@@ -657,74 +646,26 @@ function cektree(worlds)
                     if setting.item.recycle then
                         waduh()
                     else
-                        collectSet(false)
-                        sleep(150)
                         dropwir(worlds)
                         door = idList
                         warp(worlds,door)
-                        sleep(150)
-                        if setting.mode.ignoregems then
-                            setBool('Ignore Gems', true)
-                            sleep(150)
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        else
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        end
                         sleep(100)
                     end
                 end
                 if findItem(setting.item.event[1]) >= setting.item.amount then
-                    collectSet(false)
-                    sleep(150)
                     spevent(worlds)
                     door = idList
                     warp(worlds,door)
-                    sleep(150)
-                    if setting.mode.ignoregems then
-                        setBool('Ignore Gems', true)
-                        sleep(150)
-                        collectSet(true,setting.mode.range)
-                        sleep(150)
-                    else
-                        collectSet(true,setting.mode.range)
-                        sleep(150)
-                    end
                     sleep(100)
                 elseif findItem(setting.item.seed) > 50 then
-                    collectSet(false)
-                    sleep(150)
                     dropwirs(worlds)
                     door = idList
                     warp(worlds,door)
-                    sleep(150)
-                    if setting.mode.ignoregems then
-                        setBool('Ignore Gems', true)
-                        sleep(150)
-                        collectSet(true,setting.mode.range)
-                        sleep(150)
-                    else
-                        collectSet(true,setting.mode.range)
-                        sleep(150)
-                    end
                     sleep(100)
                 elseif findItem(112) >= setting.pack.mingems then
-                    collectSet(false)
-                    sleep(150)
                     buy(worlds)
                     door = idList
                     warp(worlds,door)
-                    sleep(150)
-                    if setting.mode.ignoregems then
-                        setBool('Ignore Gems', true)
-                        sleep(150)
-                        collectSet(true,setting.mode.range)
-                        sleep(150)
-                    else
-                        collectSet(true,setting.mode.range)
-                        sleep(150)
-                    end
                     sleep(100)
                 end
                 door = idList
@@ -742,6 +683,8 @@ function cektree(worlds)
                         goto BACK
                     end
                 end
+                collect(setting.mode.range)
+                sleep(25)
             end
         end
     end
@@ -750,15 +693,6 @@ end
                 
 
 function harvest(worlds)
-    if setting.mode.ignoregems then
-        setBool('Ignore Gems', true)
-        sleep(150)
-        collectSet(true,setting.mode.range)
-        sleep(150)
-    else
-        collectSet(true,setting.mode.range)
-        sleep(150)
-    end
     webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
     if mode == 'up' then
         t1 = 99
@@ -771,21 +705,10 @@ function harvest(worlds)
                     ::BACK::
                     if findItem(setting.item.support.items) == 0 then
                         if setting.item.support.access then
-                            collectSet(false)
                             pikex(worlds)
                             sleep(100)
                             door = idList
                             warp(worlds,door)
-                            sleep(150)
-                            if setting.mode.ignoregems then
-                                setBool('Ignore Gems', true)
-                                sleep(150)
-                                collectSet(true,setting.mode.range)
-                                sleep(150)
-                            else
-                                collectSet(true,setting.mode.range)
-                                sleep(150)
-                            end
                             sleep(100)
                             webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
                         end
@@ -794,78 +717,30 @@ function harvest(worlds)
                         if setting.item.recycle then
                             waduh()
                         else
-                            collectSet(false)
-                            sleep(150)
                             dropwir(worlds)
                             door = idList
                             warp(worlds,door)
-                            sleep(150)
-                            if setting.mode.ignoregems then
-                                setBool('Ignore Gems', true)
-                                sleep(150)
-                                collectSet(true,setting.mode.range)
-                                sleep(150)
-                            else
-                                collectSet(true,setting.mode.range)
-                                sleep(150)
-                            end
                             sleep(100)
                             webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
                         end
                     end
                     if findItem(setting.item.event[1]) >= setting.item.amount then
-                        collectSet(false)
-                        sleep(150)
                         spevent(worlds)
                         door = idList
                         warp(worlds,door)
                         sleep(150)
-                        if setting.mode.ignoregems then
-                            setBool('Ignore Gems', true)
-                            sleep(150)
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        else
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        end
-                        sleep(100)
                         webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
                     elseif findItem(setting.item.seed) > 50 then
-                        collectSet(false)
-                        sleep(150)
                         dropwirs(worlds)
                         door = idList
                         warp(worlds,door)
                         sleep(150)
-                        if setting.mode.ignoregems then
-                            setBool('Ignore Gems', true)
-                            sleep(150)
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        else
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        end
-                        sleep(100)
                         webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
                     elseif findItem(112) >= setting.pack.mingems then
-                        collectSet(false)
-                        sleep(150)
                         buy(worlds)
                         door = idList
                         warp(worlds,door)
                         sleep(150)
-                        if setting.mode.ignoregems then
-                            setBool('Ignore Gems', true)
-                            sleep(150)
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        else
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        end
-                        sleep(100) 
                         webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
                     end
                     door = idList
@@ -882,6 +757,8 @@ function harvest(worlds)
                             goto BACK
                         end
                     end
+                    collect(setting.mode.range)
+                    sleep(25)
                 end
             end
             if tiles == 1 then
@@ -911,22 +788,11 @@ function harvest(worlds)
                     ::BACK::
                     if findItem(setting.item.support.items) == 0 then
                         if setting.item.support.access then
-                            collectSet(false)
                             pikex(worlds)
                             sleep(100)
                             door = idList
                             warp(worlds,door)
                             sleep(150)
-                            if setting.mode.ignoregems then
-                                setBool('Ignore Gems', true)
-                                sleep(150)
-                                collectSet(true,setting.mode.range)
-                                sleep(150)
-                            else
-                                collectSet(true,setting.mode.range)
-                                sleep(150)
-                            end
-                            sleep(100)
                             webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
                         end
                     end
@@ -934,78 +800,30 @@ function harvest(worlds)
                         if setting.item.recycle then
                             waduh()
                         else
-                            collectSet(false)
-                            sleep(150)
                             dropwir(worlds)
                             door = idList
                             warp(worlds,door)
-                            sleep(150)
-                            if setting.mode.ignoregems then
-                                setBool('Ignore Gems', true)
-                                sleep(150)
-                                collectSet(true,setting.mode.range)
-                                sleep(150)
-                            else
-                                collectSet(true,setting.mode.range)
-                                sleep(150)
-                            end
                             sleep(100)
                             webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
                         end
                     end
                     if findItem(setting.item.event[1]) >= setting.item.amount then
-                        collectSet(false)
-                        sleep(150)
                         spevent(worlds)
                         door = idList
                         warp(worlds,door)
                         sleep(150)
-                        if setting.mode.ignoregems then
-                            setBool('Ignore Gems', true)
-                            sleep(150)
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        else
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        end
-                        sleep(100)
                         webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
                     elseif findItem(setting.item.seed) > 50 then
-                        collectSet(false)
-                        sleep(150)
                         dropwirs(worlds)
                         door = idList
                         warp(worlds,door)
-                        sleep(150)
-                        if setting.mode.ignoregems then
-                            setBool('Ignore Gems', true)
-                            sleep(150)
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        else
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        end
                         sleep(100)
                         webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
                     elseif findItem(112) >= setting.pack.mingems then
-                        collectSet(false)
-                        sleep(150)
                         buy(worlds)
                         door = idList
                         warp(worlds,door)
                         sleep(150)
-                        if setting.mode.ignoregems then
-                            setBool('Ignore Gems', true)
-                            sleep(150)
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        else
-                            collectSet(true,setting.mode.range)
-                            sleep(150)
-                        end
-                        sleep(100) 
                         webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
                     end
                     door = idList
@@ -1022,6 +840,8 @@ function harvest(worlds)
                             goto BACK
                         end
                     end
+                    collect(setting.mode.range)
+                    sleep(25)
                 end
             end
             if tiles == 1 then
@@ -1051,24 +871,15 @@ function collecting(worlds)
             findPath(round(obj.x / 32),math.floor(obj.y / 32))
             sleep(setting.delay.collect)
         end
+        collect(setting.mode.range)
+        sleep(25)
         if findItem(setting.item.support.items) == 0 then
             if setting.item.support.access then
-                collectSet(false)
                 pikex(worlds)
                 sleep(100)
                 door = idList
                 warp(worlds,door)
                 sleep(150)
-                if setting.mode.ignoregems then
-                    setBool('Ignore Gems', true)
-                    sleep(150)
-                    collectSet(true,setting.mode.range)
-                    sleep(150)
-                else
-                    collectSet(true,setting.mode.range)
-                    sleep(150)
-                end
-                sleep(100)
                 webcuy("Collecting",webhook,message)
             end
         end
@@ -1076,78 +887,30 @@ function collecting(worlds)
             if setting.item.recycle then
                 waduh()
             else
-                collectSet(false)
-                sleep(150)
                 dropwir(worlds)
                 door = idList
                 warp(worlds,door)
                 sleep(150)
-                if setting.mode.ignoregems then
-                    setBool('Ignore Gems', true)
-                    sleep(150)
-                    collectSet(true,setting.mode.range)
-                    sleep(150)
-                else
-                    collectSet(true,setting.mode.range)
-                    sleep(150)
-                end
-                sleep(100)
                 webcuy("Collecting",webhook,message)
             end
         end
         if findItem(setting.item.event[1]) >= setting.item.amount then
-            collectSet(false)
-            sleep(150)
             spevent(worlds)
             door = idList
             warp(worlds,door)
             sleep(150)
-            if setting.mode.ignoregems then
-                setBool('Ignore Gems', true)
-                sleep(150)
-                collectSet(true,setting.mode.range)
-                sleep(150)
-            else
-                collectSet(true,setting.mode.range)
-                sleep(150)
-            end
-            sleep(100)
             webcuy("Collecting",webhook,message)
         elseif findItem(setting.item.seed) > 50 then
-            collectSet(false)
-            sleep(150)
             dropwirs(worlds)
             door = idList
             warp(worlds,door)
             sleep(150)
-            if setting.mode.ignoregems then
-                setBool('Ignore Gems', true)
-                sleep(150)
-                collectSet(true,setting.mode.range)
-                sleep(150)
-            else
-                collectSet(true,setting.mode.range)
-                sleep(150)
-            end
-            sleep(100)
             webcuy("Collecting",webhook,message)
         elseif findItem(112) >= setting.pack.mingems then
-            collectSet(false)
-            sleep(150)
             buy(worlds)
             door = idList
             warp(worlds,door)
             sleep(150)
-            if setting.mode.ignoregems then
-                setBool('Ignore Gems', true)
-                sleep(150)
-                collectSet(true,setting.mode.range)
-                sleep(150)
-            else
-                collectSet(true,setting.mode.range)
-                sleep(150)
-            end
-            sleep(100) 
             webcuy("Collecting",webhook,message)
         end
     end
@@ -1163,9 +926,8 @@ function pikex(worlds)
         for _, obj in pairs(getObjects()) do
             if obj.id == setting.item.support.items then
                 findPath(math.floor(obj.x / 32),math.floor(obj.y / 32))
-                collectSet(true,2)
-                sleep(500)
-                collectSet(false)
+                sleep(1000)
+                collect(setting.mode.range)
             end
         end
         if findItem(setting.item.support.items) > 0 then
@@ -1190,6 +952,10 @@ if BizzantiuM.version == '1.3' and BizzantiuM.maker == 'akbarsht' then
         webcuy("Running script mode : "..setting.typeMode.."",webhook,message)
         if not nuked then
             if not wrong then
+                if setting.mode.ignoregems then
+                    setBool('Ignore Gems', true)
+                    sleep(150)
+                end
                 if setting.typeMode == 'harvest' then
                     harvest(farmList[i])
                     cektree(farmList[i])
