@@ -91,117 +91,104 @@ end
 
 function webpack()
 	if setting.webhook.access then
-        local script = [[
+        local text = [[
             $webHookUrl = "]]..setting.webhook.info.link..[[/messages/]]..setting.webhook.info.messageid..[["
-            $cpu = (Get-WmiObject win32_processor | Measure-Object -property LoadPercentage -Average | Select Average).Average
-            $ram = (Get-Counter '\Memory\Available MBytes').CounterSamples.CookedValue
-            $thumbnailObject = @{
-                url = "https://cdn.discordapp.com/attachments/1122342991705673840/1128335180789207040/1689081173833.jpg"
-            }
-            $footerObject = @{
-                text = "]].."Developed by BizzantiuM's\nLast updated : "..(os.date"%d/%m/%y":upper().." at ")..os.date("%I")..":"..os.date("%M").." "..os.date("%p"):upper()..""..[["
-            }
-            $fieldArray = @(
-                @{
-                    name = "STORAGE"
-                    value = "]]..""..[["
-                    inline = "false"
-                }
-                @{
-                    name = "BLOCK"
-                    value = "]]..wirrz()..[["
-                    inline = "false"
-                }
-                @{
-                    name = "SEED"
-                    value = "]]..wirrzz()..[["
-                    inline = "true"
-                }
-                @{
-                    name = "PACK"
-                    value = "]]..wirrzzz()..[["
-                    inline = "true"
-                }
-                @{
-                    name = "EVENT"
-                    value = "]]..wirrzzzz()..[["
-                    inline = "true"
-                }
-            )
-            $embedObject = @{
-                color = "]]..math.random(1111111,9999999)..[["
-                thumbnail = $thumbnailObject
-                footer = $footerObject
-                fields = $fieldArray
-            }
-            $embedArray = @($embedObject)
             $payload = @{
-                embeds = $embedArray
+                username = "BizzantiuM's"
+                embeds = @(
+                    @{
+                        title = "STORAGE WORLD [AUTO HARVEST v1.3]"
+                        color = "]]..math.random(111111,999999)..[["
+                        fields = @(
+                            @{
+                                name = "STORAGE"
+                                value = "]]..""..[["
+                                inline = "false"
+                            }
+                            @{
+                                name = "BLOCK"
+                                value = "]]..wirrz()..[["
+                                inline = "false"
+                            }
+                            @{
+                                name = "SEED"
+                                value = "]]..wirrzz()..[["
+                                inline = "true"
+                            }
+                            @{
+                                name = "PACK"
+                                value = "]]..wirrzzz()..[["
+                                inline = "true"
+                            }
+                            @{
+                                name = "EVENT"
+                                value = "]]..wirrzzzz()..[["
+                                inline = "true"
+                            }
+                        )
+                        footer = @{
+                            text = "Developed by BizzantiuM's\nLast updated : ]]..(os.date"%d/%m/%y":upper().." at ")..os.date("%I")..":"..os.date("%M").." "..os.date("%p"):upper()..[["
+                        }
+                    }
+                )
             }
             [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
             Invoke-RestMethod -Uri $webHookUrl -Body ($payload | ConvertTo-Json -Depth 4) -Method Patch -ContentType 'application/json'
         ]]
         local pipe = io.popen("powershell -command -", "w")
-        pipe:write(script)
+        pipe:write(text)
         pipe:close()
     end
 end
 
 function webcuy(info,link,id)
 	if setting.webhook.access then
-        local script = [[
+        local text = [[
             $webHookUrl = "]]..link..[[/messages/]]..id..[["
-            $cpu = (Get-WmiObject win32_processor | Measure-Object -property LoadPercentage -Average | Select Average).Average
-            $ram = (Get-Counter '\Memory\Available MBytes').CounterSamples.CookedValue
-            $thumbnailObject = @{
-                url = "https://cdn.discordapp.com/attachments/1122342991705673840/1128335180789207040/1689081173833.jpg"
-            }
-            $footerObject = @{
-                text = "]].."Developed by BizzantiuM's\nLast updated : "..(os.date"%d/%m/%y":upper().." at ")..os.date("%I")..":"..os.date("%M").." "..os.date("%p"):upper()..""..[["
-            }
-            $fieldArray = @(
-                @{
-                    name = ""
-                    value = "]].."```RUNNING``` : [ ```"..alamak(os.difftime(os.time(),st)).."``` ]"..[["
-                    inline = "false"
-                }
-                @{
-                    name = "BOT INFO"
-                    value = "]].."```TASK``` : ```"..info.."```\n```NAME / SLOT``` : [ ```"..getBot().name.."``` ] / [ ```"..slot.."```]\n```CURRENT`` : [ ||"..getBot().world.."|| ]\n```LEVEL``` : [ ```"..getBot().level.."``` ]\n```STATUS``` : [ ```"..string.upper(getBot().status).."``` ]\n```GEMS``` : [ ```"..getBot().gems.."```]"..[["
-                    inline = "false"
-                }
-                @{
-                    name = "WORLD STATIC"
-                    value = "]]..""..[["
-                    inline = "false"
-                }
-                @{
-                    name = "FARM"
-                    value = "]]..wirrcuy()..[["
-                    inline = "true"
-                }
-                @{
-                    name = "ESTIMATE"
-                    value = "]]..wirrbru()..[["
-                    inline = "true"
-                }
-            )
-            $embedObject = @{
-                title = "AUTO HARVEST v1.3 []]..string.upper(setting.typeMode)..[[]"
-                color = "]]..math.random(1111111,9999999)..[["
-                thumbnail = $thumbnailObject
-                footer = $footerObject
-                fields = $fieldArray
-            }
-            $embedArray = @($embedObject)
             $payload = @{
-                embeds = $embedArray
+                username = "BizzantiuM's"
+                embeds = @(
+                    @{
+                        title = "AUTO HARVEST v1.3[]]..string.upper(setting.typeMode)..[[]"
+                        color = "]]..math.random(111111,999999)..[["
+                        fields = @(
+                            @{
+                                name = ""
+                                value = "]].."```RUNNING``` : [ ```"..alamak(os.difftime(os.time(),st)).."``` ]"..[["
+                                inline = "false"
+                            }
+                            @{
+                                name = "BOT INFO"
+                                value = "]].."```TASK``` : ```"..info.."```\n```NAME / SLOT``` : [ ```"..getBot().name.."``` ] / [ ```"..slot.."```]\n```CURRENT`` : [ ||"..getBot().world.."|| ]\n```LEVEL``` : [ ```"..getBot().level.."``` ]\n```STATUS``` : [ ```"..string.upper(getBot().status).."``` ]\n```GEMS``` : [ ```"..getBot().gems.."```]"..[["
+                                inline = "false"
+                            }
+                            @{
+                                name = "WORLD STATIC"
+                                value = "]]..""..[["
+                                inline = "false"
+                            }
+                            @{
+                                name = "FARM"
+                                value = "]]..wirrcuy()..[["
+                                inline = "true"
+                            }
+                            @{
+                                name = "ESTIMATE"
+                                value = "]]..wirrbru()..[["
+                                inline = "true"
+                            }
+                        )
+                        footer = @{
+                            text = "Developed by BizzantiuM's\nLast updated : ]]..(os.date"%d/%m/%y":upper().." at ")..os.date("%I")..":"..os.date("%M").." "..os.date("%p"):upper()..[["
+                        }
+                    }
+                )
             }
             [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
             Invoke-RestMethod -Uri $webHookUrl -Body ($payload | ConvertTo-Json -Depth 4) -Method Patch -ContentType 'application/json'
         ]]
         local pipe = io.popen("powershell -command -", "w")
-        pipe:write(script)
+        pipe:write(text)
         pipe:close()
     end
 end
@@ -245,7 +232,7 @@ function warp(world,id)
         while getBot().world ~= world:upper() and not nuked do
             sendPacket("action|join_request\nname|"..bz.."\ninvitedWorld|0",3)
             sleep(setting.delay.warp)
-            if join == 15 then
+            if join == 10 then
                 print("World after : "..getBot().world.." is inacessible!, skipped world")
                 sleep(100)
                 infokand(setting.webhook.status,"World after : ||"..getBot().world.."|| is inacessible @everyone")
@@ -315,6 +302,27 @@ function gscan(id)
 	return count
 end
 
+function checker(world)
+    wir = 0
+    while getBot().world ~= world:upper() and not nuked do
+        sendPacket("action|join_request\nname|"..world:upper().."\ninvitedWorld|0",3)
+        sleep(setting.delay.warp)
+        if wir == 25 then
+            nuked = true
+        else
+            wir = wir + 1
+        end
+    end
+end
+
+function clears()
+    webcuy("Clearing world history",webhook,message)
+    for _, wir in pairs(setting.mode.world) do
+        checker(wir)
+        sleep(100)
+    end
+end
+
 function buy(worlds)
 	buying = 0
     while findItem(112) >= setting.pack.mingems do
@@ -322,24 +330,33 @@ function buy(worlds)
             sendPacket('action|buy\nitem|upgrade_backpack',2)
             sleep(1000)
         end
-        if findItem(112) > setting.pack.price then
-            sendPacket('action|buy\nitem|'..setting.pack.debug,2)
-            sleep(1000)
-            buying = buying + 1
-        else
-            break
+        for i = 1, setting.pack.maxbuy do
+            if findItem(112) > setting.pack.price then
+                sendPacket('action|buy\nitem|'..setting.pack.debug,2)
+                sleep(1000)
+                buying = buying + 1
+            else
+                break
+            end
         end
+        storePack()
     end
-    storePack()
+    if setting.mode.clearhistory then
+        clears()
+    end
 end
 
 function storePack()
     for i = packkk , #setting.storage.pack.world do
         setJob('Storing packs')
+        world = setting.storage.pack.world[i]
         door = setting.storage.pack.door
-        warp(setting.storage.pack.world[i],door)
+        warp(world,door)
+        wirz[world] = "["..gscan(setting.pack.packList[1]).."+"..findItem(setting.pack.packList[1]).."]"
         webcuy("Storing packs",webhook,message)
         if gscan(setting.pack.packList[1]) >= setting.storage.pack.limit then
+            wirz[world] = "["..gscan(setting.pack.packList[1]).."] LIMIT !!!"
+            webpack()
             infokand(setting.webhook.status,'[ ||'..getBot().world..'|| ] Has reached limit, skipped world')
             packkk = packkk + 1
             if packkk > #setting.storage.pack.world then
@@ -375,6 +392,7 @@ function storePack()
                                     goto packzz
                                 end
                             end
+                            webpack()
                         end
                         if findItem(pack) == 0 then
                             break
@@ -400,13 +418,12 @@ function storePack()
                                     goto packz
                                 end
                             end
+                            webpack()
                         end
                         if findItem(pack) == 0 then
                             break
                         end
                     end
-                    wirz[setting.world.storage.pack.world[i]] = "["..gscan(setting.pack.packList[1]).."]"
-                    webpack()
                 end
             end
             sleep(100)
@@ -420,10 +437,14 @@ end
 function spevent(worlds)
     for i = eventt , #setting.storage.event.world do
         setJob('Storing special items')
+        world = setting.storage.event.world[i]
         door = setting.storage.event.door
-        warp(setting.storage.event.world[i],door)
+        warp(world,door)
+        wirz[world] = "["..gscan(setting.item.event[1]).."+"..findItem(setting.item.event[1]).."]"
         webcuy("Storing special items",webhook,message)
         if gscan(setting.item.event[1]) >= setting.storage.event.limit then
+            wirz[world] = "["..gscan(setting.item.event[1]).."] LIMIT !!!"
+            webpack()
             infokand(setting.webhook.status,'[ ||'..getBot().world..'|| ] Has reached limit, skipped world')
             eventt = eventt + 1
             if eventt > #setting.storage.event.world then
@@ -459,6 +480,7 @@ function spevent(worlds)
                                     goto iye
                                 end
                             end
+                            webpack()
                         end
                         if findItem(items) == 0 then
                             break
@@ -484,20 +506,22 @@ function spevent(worlds)
                                     goto alamaks
                                 end
                             end
+                            webpack()
                         end
                         if findItem(items) == 0 then
                             break
                         end
                     end
                 end
-                wirz[setting.storage.event.world[i]] = "["..gscan(setting.item.event[1]).."]"
-                webpack()
             end
             sleep(100)
             break
         end
     end
     setJob(setting.typeMode)
+    if setting.mode.clearhistory then
+        clears()
+    end
 end
 
 function scanTree(id)
@@ -523,10 +547,14 @@ end
 function dropwir(worlds)
     for i = blockk , #setting.storage.block.world do
         setJob('Storing Blocks')
+        world = setting.storage.block.world[i]
         door = setting.storage.block.door
-        warp(setting.storage.block.world[i],door)
+        warp(world,door)
+        wirz[setting.storage.block.world[i]] = "["..gscan(setting.item.block).."+"..findItem(setting.item.block).."]"
         webcuy("Storing blocks",webhook,message)
         if gscan(setting.item.block) >= setting.storage.block.limit then
+            wirz[setting.storage.block.world[i]] = "["..gscan(setting.item.block).."] LIMIT !!!"
+            webpack()
             infokand(setting.webhook.status,'[ ||'..getBot().world..'|| ] Has reached limit, skipped world')
             blockk = blockk + 1
             if blockk > #setting.storage.block.world then
@@ -560,7 +588,6 @@ function dropwir(worlds)
                             goto back
                         end
                     end
-                    wirz[setting.storage.block.world[i]] = "["..gscan(setting.item.block).."]"
                     webpack()
                 end
                 if findItem(setting.item.block) == 0 then
@@ -572,15 +599,22 @@ function dropwir(worlds)
         end
     end
     setJob(setting.typeMode)
+    if setting.mode.clearhistory then
+        clears()
+    end
 end
 
 function dropwirs(worlds)
     for i = seedd , #setting.storage.seed.world do
         setJob('Storing Seeds')
+        world = setting.storage.seed.world[i]
         door = setting.storage.seed.door
-        warp(setting.storage.seed.world[i],door)
+        warp(world,door)
+        wirz[setting.storage.seed.world[i]] = "["..gscan(setting.item.seed).."+"..findItem(setting.item.block).."]"
         webcuy("Storing seeds",webhook,message)
         if gscan(setting.item.seed) >= setting.storage.seed.limit then
+            wirz[setting.storage.seed.world[i]] = "["..gscan(setting.item.seed).."] LIMIT !!!"
+            webpack()
             infokand(setting.webhook.status,'[ ||'..getBot().world..'|| ] Has reached limit, skipped world')
             seedd = seedd + 1
             if seedd > #setting.storage.seed.world then
@@ -614,7 +648,6 @@ function dropwirs(worlds)
                             goto wirs
                         end
                     end
-                    wirz[setting.storage.seed.world[i]] = "["..gscan(setting.item.seed).."]"
                     webpack()
                 end
                 if findItem(setting.item.seed) == 0 then
@@ -626,6 +659,9 @@ function dropwirs(worlds)
         end	
     end
     setJob(setting.typeMode)
+    if setting.mode.clearhistory then
+        clears()
+    end
 end
 
 function cektree(worlds)
@@ -657,7 +693,7 @@ function cektree(worlds)
                     door = idList
                     warp(worlds,door)
                     sleep(100)
-                elseif findItem(setting.item.seed) > 50 then
+                elseif findItem(setting.item.seed) >= 180 then
                     dropwirs(worlds)
                     door = idList
                     warp(worlds,door)
@@ -730,7 +766,7 @@ function harvest(worlds)
                         warp(worlds,door)
                         sleep(150)
                         webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
-                    elseif findItem(setting.item.seed) > 50 then
+                    elseif findItem(setting.item.seed) >= 180 then
                         dropwirs(worlds)
                         door = idList
                         warp(worlds,door)
@@ -813,7 +849,7 @@ function harvest(worlds)
                         warp(worlds,door)
                         sleep(150)
                         webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
-                    elseif findItem(setting.item.seed) > 50 then
+                    elseif findItem(setting.item.seed) >= 180 then
                         dropwirs(worlds)
                         door = idList
                         warp(worlds,door)
@@ -899,7 +935,7 @@ function collecting(worlds)
             warp(worlds,door)
             sleep(150)
             webcuy("Collecting",webhook,message)
-        elseif findItem(setting.item.seed) > 50 then
+        elseif findItem(setting.item.seed) >= 180 then
             dropwirs(worlds)
             door = idList
             warp(worlds,door)
@@ -941,14 +977,17 @@ function pikex(worlds)
     sleep(2000)
     sendPacket("action|dialog_return\ndialog_name|drop_item\nitemID|"..setting.item.support.items.."|\ncount|"..(findItem(setting.item.support.items) - setting.item.support.keep),2)
     sleep(2000)
+    setJob(setting.typeMode)
 end
 
-if BizzantiuM.version == '1.3' and BizzantiuM.maker == 'akbarsht' then
+if BizzantiuM.version == '1.4' and BizzantiuM.maker == 'akbarsht' then
+    sleep(math.random(2000,10000))
     for i = startfrom,#farmList do
         door = idList
         setJob("Harvest")
         warp(farmList[i],door)
         webcuy("Running script mode : "..setting.typeMode.."",webhook,message)
+        webpack()
         if not nuked then
             if not wrong then
                 if setting.mode.ignoregems then
