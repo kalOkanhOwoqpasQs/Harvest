@@ -414,6 +414,8 @@ function storePack()
                 end
             else
                 wirz[world] = "WRONG DOOR !!!"
+                wrong = false
+                sleep(1000)
                 print("Id door storage special event is wrong, check ur id door !!")
                 infokand(setting.webhook.status,"Id door storage special event is wrong, check ur id door !! @everyone")
                 eventt = eventt + 1
@@ -430,6 +432,8 @@ function storePack()
             end
         else
             wirz[world] = "NUKED !!!"
+            nuked = false
+            sleep(1000)
             print("Storage packs is NUKED, check ur storage !!")
             infokand(setting.webhook.status,"Storage packs is NUKED, check ur storage !! @everyone")
             packkk = packkk + 1
@@ -537,6 +541,8 @@ function spevent(worlds)
                 end
             else
                 wirz[world] = "WRONG DOOR !!!"
+                wrong = false
+                sleep(1000)
                 print("Id door storage special event is wrong, check ur id door !!")
                 infokand(setting.webhook.status,"Id door storage special event is wrong, check ur id door !! @everyone")
                 eventt = eventt + 1
@@ -553,6 +559,8 @@ function spevent(worlds)
             end
         else
             wirz[world] = "NUKED !!!"
+            nuked = false
+            sleep(1000)
             print("Storage special event is NUKED, check ur storage !!")
             infokand(setting.webhook.status,"Storage special event is NUKED, check ur storage !! @everyone")
             eventt = eventt + 1
@@ -629,6 +637,8 @@ function dropwir(worlds)
                 end
             else
                 wirz[world] = "WRONG DOOR !!!"
+                wrong = false
+                sleep(1000)
                 print("Id door storage blocks is wrong, check ur id door !!")
                 infokand(setting.webhook.status,"Id door storage blocks is wrong, check ur id door !! @everyone")
                 blockk = blockk + 1
@@ -645,6 +655,8 @@ function dropwir(worlds)
             end
         else
             wirz[world] = "NUKED !!!"
+            nuked = false
+            sleep(1000)
             print("Storage blocks is NUKED, check ur storage !!")
             infokand(setting.webhook.status,"Storage blocks is NUKED, check ur storage !! @everyone")
             blockk = blockk + 1
@@ -723,6 +735,8 @@ function dropwirs(worlds)
                 end
             else
                 wirz[world] = "WRONG DOOR !!!"
+                wrong = false
+                sleep(1000)
                 print("Id door storage seeds is wrong, check ur id door !!")
                 infokand(setting.webhook.status,"Id door storage seeds is wrong, check ur id door !! @everyone")
                 seedd = seedd + 1
@@ -739,6 +753,8 @@ function dropwirs(worlds)
             end
         else
             wirz[world] = "NUKED !!!"
+            nuked = false
+            sleep(1000)
             print("Storage seeds is NUKED, check ur storage !!")
             infokand(setting.webhook.status,"Storage seeds is NUKED, check ur storage !! @everyone")
             seedd = seedd + 1
