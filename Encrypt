@@ -210,7 +210,6 @@ function alamak(secs)
 end
 
 function warp(world,id)
-	local join = 0
     bz = world
     if door then
         bz = bz .. "|" .. door
@@ -232,8 +231,7 @@ function warp(world,id)
     end
     if door and getBot().world == string.upper(world) then
         local stuck = 0
-        if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 and not wrong then
-            repeat
+        while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 and not wrong do
             sendPacket("action|join_request\nname|"..world:upper()..'|'..id:upper().."\ninvitedWorld|0",3)
             sleep(setting.delay.warp)
             if stuck == 5 then
@@ -241,7 +239,6 @@ function warp(world,id)
             else
                 stuck = stuck + 1
             end
-            until getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg ~= 6
         end
     end
 end
@@ -1110,7 +1107,7 @@ function pikex(worlds)
                         sleep(1000)
                         collect(setting.mode.range)
                         sleep(1000)
-                        if findItem(setting.item.support.items) >= 1 then
+                        if findItem(setting.item.support.items) > 0  then
                             move(-1,0)
                             sleep(1000)
                             wear(setting.item.support.items)
@@ -1121,6 +1118,7 @@ function pikex(worlds)
                             sleep(2000)
                             print("Success take and wear the support items !!")
                             infokand(setting.webhook.status,"Success take and wear the support items !! @everyone")
+                            break
                         end
                     end
                 end
