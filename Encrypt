@@ -1,10 +1,16 @@
-mode = bot[getBot().name:upper()].mode
-startfrom = bot[getBot().name:upper()].startfrom
-slot = bot[getBot().name:upper()].slot
-farmList = bot[getBot().name:upper()].farmList
-idList = bot[getBot().name:upper()].idList
-webhook = bot[getBot().name:upper()].webhooktask.link
-message = bot[getBot().name:upper()].webhooktask.messageid
+for i, bot in pairs(getBots()) do
+    if getBot().name:upper() == bot.name:upper() then
+        index = i
+    end
+end
+
+mode = bot[index].mode
+startfrom = bot[index].startfrom
+slot = bot[index].slot
+farmList = bot[index].farmList
+idList = bot[index].idList
+webhook = bot[index].webhooktask.link
+message = bot[index].webhooktask.messageid
 indexx = 1
 local iTile = 0
 local bTile = 0
