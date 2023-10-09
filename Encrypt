@@ -250,6 +250,46 @@ function warp(world,id)
 end
 
 function reconnect(world,id,x,y)
+    if getBot().world == "EXIT" then 
+        infokand(setting.webhook.status,"[ ||"..getBot().name.."|| ] stuck EXIT ??, trying to join world again !! @everyone")
+        sleep(100)
+        while getBot().world ~= world:upper() do
+            sendPacket("action|join_request\nname|"..world:upper().."\ninvitedWorld|0",3)
+            sleep(setting.delay.warp)
+        end
+        if id ~= "" then
+            if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 then
+                repeat
+                sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
+                sleep(setting.delay.warp)
+                until getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg ~= 6
+            end
+        end
+        if x and y then
+            while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
+                findPath(x,y)
+                sleep(100)
+            end
+        end
+        infokand(setting.webhook.status,"[ ||"..getBot().name.."|| ] success to joining world !! @everyone")
+        sleep(100)
+    end
+    if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 then
+        infokand(setting.webhook.status,"Got killed by foreigners??")
+        sleep(100)
+        repeat
+            sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
+            sleep(setting.delay.warp)
+        until getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg ~= 6
+        if x and y then
+            while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
+                findPath(x,y)
+                sleep(100)
+            end
+        end
+        infokand(setting.webhook.status,"Bot already back to pos")
+        sleep(100)
+    end
     if getBot().status ~= "online" then
         infokand(setting.webhook.status,''..getBot().name..' status is '..getBot().status..' ! @everyone')
         sleep(150)
