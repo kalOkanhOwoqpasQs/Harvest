@@ -293,11 +293,9 @@ function reconnect(world,id,x,y)
     if getBot().status ~= "online" then
         infokand(setting.webhook.status,''..getBot().name..' status is '..getBot().status..' ! @everyone')
         sleep(150)
-        if getBot().status ~= "online" then
-            repeat
+        while getBot().status ~= "online" do
             connect()
             sleep(setting.delay.reconnect)
-            until getBot().status == "online"
         end
         while getBot().world ~= world:upper() do
             sendPacket('action|join_request\nname|'..world:upper()..'\ninvitedWorld|0',3)
@@ -892,184 +890,305 @@ end
 function harvest(worlds)
     webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
     treez[worlds] = ''..scanTrees(setting.item.seed)..''
-    if mode == 'up' then
-        t1 = 99
-        t2 = 0
-        t3 = -1
-        tiles = 0 
-        for y = -1, 53 do
-            for x = t1, t2, t3 do
-                if getTile(x,y).fg == setting.item.seed and getTile(x,y).ready then
-                    treez[worlds] = ''..scanTrees(setting.item.seed)..''
-                    ::BACK::
-                    if findItem(setting.item.support.items) == 0 then
-                        if setting.item.support.access then
-                            pikex(worlds)
-                            sleep(100)
+    if setting.typeMode == 'harvest' then
+        if mode == 'up' then
+            t1 = 99
+            t2 = 0
+            t3 = -1
+            tiles = 0 
+            for y = -1, 53 do
+                for x = t1, t2, t3 do
+                    if getTile(x,y).fg == setting.item.seed and getTile(x,y).ready then
+                        treez[worlds] = ''..scanTrees(setting.item.seed)..''
+                        if findItem(setting.item.support.items) == 0 then
+                            if setting.item.support.access then
+                                pikex(worlds)
+                                sleep(100)
+                                door = idList
+                                warp(worlds,door)
+                                sleep(100)
+                                webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
+                            end
+                        end
+                        if findItem(setting.item.block) > 180 then
+                            if setting.item.recycle then
+                                waduh()
+                            else
+                                dropwir(worlds)
+                                door = idList
+                                warp(worlds,door)
+                                sleep(100)
+                                webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
+                            end
+                        end
+                        if findItem(setting.item.event[1]) > setting.item.amount then
+                            spevent(worlds)
                             door = idList
                             warp(worlds,door)
-                            sleep(100)
+                            sleep(150)
                             webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
-                        end
-                    end
-                    if findItem(setting.item.block) > 180 then
-                        if setting.item.recycle then
-                            waduh()
-                        else
-                            dropwir(worlds)
+                        elseif findItem(setting.item.seed) > 180 then
+                            dropwirs(worlds)
                             door = idList
                             warp(worlds,door)
-                            sleep(100)
+                            sleep(150)
                             webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
-                        end
-                    end
-                    if findItem(setting.item.event[1]) > setting.item.amount then
-                        spevent(worlds)
-                        door = idList
-                        warp(worlds,door)
-                        sleep(150)
-                        webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
-                    elseif findItem(setting.item.seed) > 180 then
-                        dropwirs(worlds)
-                        door = idList
-                        warp(worlds,door)
-                        sleep(150)
-                        webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
-                    elseif findItem(112) > setting.pack.mingems then
-                        buy(worlds)
-                        door = idList
-                        warp(worlds,door)
-                        sleep(150)
-                        webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
-                    end
-                    door = idList
-                    findPath(x+(pTile),y)
-                    reconnect(worlds,door,x+(pTile),y)
-                    local count = 0
-                    if getTile(x,y).fg == setting.item.seed then
-                        punch(0,0)
-                        sleep(setting.delay.harvest)
-                        reconnect(worlds,door,x+(pTile),y)
-                        count = count + 1
-                        if count >= 3 then
-                            pTile = pTile + 1
-                            goto BACK
-                        end
-                    end
-                    if setting.mode.ignoregems then
-                        collect(setting.mode.range,112)
-                    else
-                        collect(setting.mode.range)
-                    end
-                    sleep(25)
-                end
-            end
-            if tiles == 1 then
-                if t1 == 0 then
-                    t1 = 99
-                    t2 = 0
-                    t3 = -1
-                    tiles = 0
-                elseif t1 == 99 then
-                    t1 = 0
-                    t2 = 99
-                    t3 = 1
-                    tiles = 0
-                end
-            elseif tiles == 0 then
-                tiles = tiles + 1
-            end
-        end
-    elseif mode == 'down' then
-        t1 = 99
-        t2 = 0
-        t3 = -1
-        tiles = 0
-        for y = 53, 0, -1 do
-            for x = t1, t2, t3 do
-                if getTile(x,y).fg == setting.item.seed and getTile(x,y).ready then
-                    treez[worlds] = ''..scanTrees(setting.item.seed)..''
-                    ::BACK::
-                    if findItem(setting.item.support.items) == 0 then
-                        if setting.item.support.access then
-                            pikex(worlds)
-                            sleep(100)
+                        elseif findItem(112) > setting.pack.mingems then
+                            buy(worlds)
                             door = idList
                             warp(worlds,door)
                             sleep(150)
                             webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
                         end
-                    end
-                    if findItem(setting.item.block) > 180 then
-                        if setting.item.recycle then
-                            waduh()
+                        door = idList
+                        findPath(x,y)
+                        reconnect(worlds,door,x,y)
+                        local count = 0
+                        if getTile(x,y).fg == setting.item.seed then
+                            punch(0,0)
+                            sleep(setting.delay.harvest)
+                            reconnect(worlds,door,x,y)
+                        end
+                        if setting.mode.ignoregems then
+                            collect(setting.mode.range,112)
                         else
-                            dropwir(worlds)
+                            collect(setting.mode.range)
+                        end
+                        sleep(25)
+                    end
+                end
+                if tiles == 1 then
+                    if t1 == 0 then
+                        t1 = 99
+                        t2 = 0
+                        t3 = -1
+                        tiles = 0
+                    elseif t1 == 99 then
+                        t1 = 0
+                        t2 = 99
+                        t3 = 1
+                        tiles = 0
+                    end
+                elseif tiles == 0 then
+                    tiles = tiles + 1
+                end
+            end
+        elseif mode == 'down' then
+            t1 = 99
+            t2 = 0
+            t3 = -1
+            tiles = 0
+            for y = 53, 0, -1 do
+                for x = t1, t2, t3 do
+                    if getTile(x,y).fg == setting.item.seed and getTile(x,y).ready then
+                        treez[worlds] = ''..scanTrees(setting.item.seed)..''
+                        if findItem(setting.item.support.items) == 0 then
+                            if setting.item.support.access then
+                                pikex(worlds)
+                                sleep(100)
+                                door = idList
+                                warp(worlds,door)
+                                sleep(150)
+                                webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
+                            end
+                        end
+                        if findItem(setting.item.block) > 180 then
+                            if setting.item.recycle then
+                                waduh()
+                            else
+                                dropwir(worlds)
+                                door = idList
+                                warp(worlds,door)
+                                sleep(100)
+                                webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
+                            end
+                        end
+                        if findItem(setting.item.event[1]) > setting.item.amount then
+                            spevent(worlds)
+                            door = idList
+                            warp(worlds,door)
+                            sleep(150)
+                            webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
+                        elseif findItem(setting.item.seed) > 180 then
+                            dropwirs(worlds)
                             door = idList
                             warp(worlds,door)
                             sleep(100)
                             webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
+                        elseif findItem(112) > setting.pack.mingems then
+                            buy(worlds)
+                            door = idList
+                            warp(worlds,door)
+                            sleep(150)
+                            webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
                         end
-                    end
-                    if findItem(setting.item.event[1]) > setting.item.amount then
-                        spevent(worlds)
                         door = idList
-                        warp(worlds,door)
-                        sleep(150)
-                        webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
-                    elseif findItem(setting.item.seed) > 180 then
-                        dropwirs(worlds)
-                        door = idList
-                        warp(worlds,door)
-                        sleep(100)
-                        webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
-                    elseif findItem(112) > setting.pack.mingems then
-                        buy(worlds)
-                        door = idList
-                        warp(worlds,door)
-                        sleep(150)
-                        webcuy("Harvesting mode : "..string.upper(mode).."",webhook,message)
-                    end
-                    door = idList
-                    findPath(x+(pTile),y)
-                    reconnect(worlds,door,x+(pTile),y)
-                    local count = 0
-                    if getTile(x,y).fg == setting.item.seed then
-                        punch(0,0)
-                        sleep(setting.delay.harvest)
-                        reconnect(worlds,door,x+(pTile),y)
-                        count = count + 1
-                        if count >= 3 then
-                            pTile = pTile + 1
-                            goto BACK
+                        findPath(x,y)
+                        reconnect(worlds,door,x,y)
+                        local count = 0
+                        if getTile(x,y).fg == setting.item.seed then
+                            punch(0,0)
+                            sleep(setting.delay.harvest)
+                            reconnect(worlds,door,x,y)
                         end
+                        if setting.mode.ignoregems then
+                            collect(setting.mode.range,112)
+                        else
+                            collect(setting.mode.range)
+                        end
+                        sleep(25)
                     end
-                    if setting.mode.ignoregems then
-                        collect(setting.mode.range,112)
-                    else
-                        collect(setting.mode.range)
+                end
+                if tiles == 1 then
+                    if t1 == 0 then
+                        t1 = 99
+                        t2 = 0
+                        t3 = -1
+                        tiles = 0
+                    elseif t1 == 99 then
+                        t1 = 0
+                        t2 = 99
+                        t3 = 1
+                        tiles = 0
                     end
-                    sleep(25)
+                elseif tiles == 0 then
+                    tiles = tiles + 1
                 end
             end
-            if tiles == 1 then
-                if t1 == 0 then
-                    t1 = 99
-                    t2 = 0
-                    t3 = -1
-                    tiles = 0
-                elseif t1 == 99 then
-                    t1 = 0
-                    t2 = 99
-                    t3 = 1
-                    tiles = 0
+        end
+    elseif setting.typeMode == "collect" then
+        if mode == 'up' then
+            t1 = 99
+            t2 = 0
+            t3 = -1
+            tiles = 0 
+            for y = -1, 53 do
+                for x = t1, t2, t3 do
+                    if getTile(x, y).fg == 0 and getTile(x, y + 1).flags ~= 0 and gscan(setting.item.block) ~= 0 then
+                        if findItem(setting.item.block) > 180 then
+                            if setting.item.recycle then
+                                waduh()
+                            else
+                                dropwir(worlds)
+                                door = idList
+                                warp(worlds,door)
+                                sleep(100)
+                                webcuy("Collecting mode : "..string.upper(mode).."",webhook,message)
+                            end
+                        end
+                        if findItem(setting.item.event[1]) > setting.item.amount then
+                            spevent(worlds)
+                            door = idList
+                            warp(worlds,door)
+                            sleep(150)
+                            webcuy("Collecting mode : "..string.upper(mode).."",webhook,message)
+                        elseif findItem(setting.item.seed) > 180 then
+                            dropwirs(worlds)
+                            door = idList
+                            warp(worlds,door)
+                            sleep(150)
+                            webcuy("Collecting mode : "..string.upper(mode).."",webhook,message)
+                        elseif findItem(112) > setting.pack.mingems then
+                            buy(worlds)
+                            door = idList
+                            warp(worlds,door)
+                            sleep(150)
+                            webcuy("Collecting mode : "..string.upper(mode).."",webhook,message)
+                        end
+                        door = idList
+                        findPath(x,y)
+                        reconnect(worlds,door,x,y)
+                        if setting.mode.ignoregems then
+                            collect(setting.mode.range,112)
+                        else
+                            collect(setting.mode.range)
+                        end
+                        sleep(setting.delay.collect)
+                    end
                 end
-            elseif tiles == 0 then
-                tiles = tiles + 1
+                if tiles == 1 then
+                    if t1 == 0 then
+                        t1 = 99
+                        t2 = 0
+                        t3 = -1
+                        tiles = 0
+                    elseif t1 == 99 then
+                        t1 = 0
+                        t2 = 99
+                        t3 = 1
+                        tiles = 0
+                    end
+                elseif tiles == 0 then
+                    tiles = tiles + 1
+                end
+            end
+        elseif mode == 'down' then
+            t1 = 99
+            t2 = 0
+            t3 = -1
+            tiles = 0
+            for y = 53, 0, -1 do
+                for x = t1, t2, t3 do
+                    if getTile(x, y).fg == 0 and getTile(x, y + 1).flags ~= 0 and gscan(setting.item.block) ~= 0 then
+                        if findItem(setting.item.block) > 180 then
+                            if setting.item.recycle then
+                                waduh()
+                            else
+                                dropwir(worlds)
+                                door = idList
+                                warp(worlds,door)
+                                sleep(100)
+                                webcuy("Collecting mode : "..string.upper(mode).."",webhook,message)
+                            end
+                        end
+                        if findItem(setting.item.event[1]) > setting.item.amount then
+                            spevent(worlds)
+                            door = idList
+                            warp(worlds,door)
+                            sleep(150)
+                            webcuy("Collecting mode : "..string.upper(mode).."",webhook,message)
+                        elseif findItem(setting.item.seed) > 180 then
+                            dropwirs(worlds)
+                            door = idList
+                            warp(worlds,door)
+                            sleep(150)
+                            webcuy("Collecting mode : "..string.upper(mode).."",webhook,message)
+                        elseif findItem(112) > setting.pack.mingems then
+                            buy(worlds)
+                            door = idList
+                            warp(worlds,door)
+                            sleep(150)
+                            webcuy("Collecting mode : "..string.upper(mode).."",webhook,message)
+                        end
+                        door = idList
+                        findPath(x,y)
+                        reconnect(worlds,door,x,y)
+                        if setting.mode.ignoregems then
+                            collect(setting.mode.range,112)
+                        else
+                            collect(setting.mode.range)
+                        end
+                        sleep(setting.delay.collect)
+                    end
+                end
+                if tiles == 1 then
+                    if t1 == 0 then
+                        t1 = 99
+                        t2 = 0
+                        t3 = -1
+                        tiles = 0
+                    elseif t1 == 99 then
+                        t1 = 0
+                        t2 = 99
+                        t3 = 1
+                        tiles = 0
+                    end
+                elseif tiles == 0 then
+                    tiles = tiles + 1
+                end
             end
         end
     end
-    pTile = 0
 end
 
 function scanTrees(id)
@@ -1198,7 +1317,7 @@ if BizzantiuM.version == '1.5' and BizzantiuM.maker == 'akbarsht' then
                     cektree(farmList[i])
                     collecting(farmList[i])
                 elseif setting.typeMode == 'collect' then
-                    collecting(farmList[i])
+                    harvest(farmList[i])
                 end
                 kelaz[farmList[i]] = "```"..alamak(os.difftime(os.time(),st)).."```"
             else
