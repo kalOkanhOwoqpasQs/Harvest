@@ -1144,7 +1144,7 @@ identity.running = function(threads)
                         else
                             collect(setting.mode.range)
                         end
-                        sleep(25)
+                        sleep(setting.delay.collect)
                     end
                 end
                 if tileD == 1 then
@@ -1211,7 +1211,7 @@ identity.running = function(threads)
                         else
                             collect(setting.mode.range)
                         end
-                        sleep(25)
+                        sleep(setting.delay.collect)
                     end
                 end
                 if tileD == 1 then
