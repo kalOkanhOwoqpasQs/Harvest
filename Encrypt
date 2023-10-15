@@ -307,7 +307,7 @@ identity.reconnect = function(world,id,x,y)
             connect()
             sleep(setting.delay.reconnect)
             if getBot().status == "suspended" or getBot().status == "banned" or getBot().status == "ercon" then
-                botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is "..getBot().status..", removing bot @everyone")
+                identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is "..getBot().status..", removing bot @everyone")
                 print("[ "..getBot().name.." ] slot : "..slot.." status is "..getBot().status..", removing bot")
                 if setting.mode.removeBot then
                     removeBot(getBot().name)
