@@ -271,34 +271,23 @@ identity.reconnect = function(world,id,x,y)
             sendPacket("action|join_request\nname|"..world:upper().."\ninvitedWorld|0",3)
             sleep(setting.delay.warp)
         end
-        if id ~= "" then
+        if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 then
+            local stuck = 0
             while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
                 sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
                 sleep(setting.delay.warp)
+                if stuck == 3 then
+                    identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is stuck at white door @everyone")
+                    print("[ "..getBot().name.." ] status is stuck at white door")
+                end
             end
         end
-        if x and y then
-            while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
-                findPath(x,y)
-                sleep(100)
-            end
+        while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
+            findPath(x,y)
+            sleep(100)
         end
         identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." success to joining world @everyone")
         print("[ "..getBot().name.." ] slot : "..slot.." success to joining world")
-    end
-    while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
-        identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." back to white door, what happened?! trying back to position")
-        print("[ "..getBot().name.." ] slot : "..slot.." back to white door, what happened?! trying back to position")
-        sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
-        sleep(setting.delay.warp)
-        if x and y then
-            while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
-                findPath(x,y)
-                sleep(100)
-            end
-        end
-        identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." already back to position")
-        print("[ "..getBot().name.." ] slot : "..slot.." already back to position")
     end
     if getBot().status ~= "online" then
         identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is "..getBot().status.." @everyone")
@@ -320,20 +309,43 @@ identity.reconnect = function(world,id,x,y)
             sendPacket("action|join_request\nname|"..world:upper().."\ninvitedWorld|0",3)
             sleep(setting.delay.warp)
         end
-        if id ~= "" then
+        if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 then
+            local stuck = 0
             while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
                 sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
                 sleep(setting.delay.warp)
+                if stuck == 3 then
+                    identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is stuck at white door @everyone")
+                    print("[ "..getBot().name.." ] status is stuck at white door")
+                    error()
+                end
             end
         end
-        if x and y then
-            while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
-                findPath(x,y)
-                sleep(150)
-            end
+        while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
+            findPath(x,y)
+            sleep(150)
         end
         identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is "..getBot().status.." @everyone")
         print("[ "..getBot().name.." ] slot : "..slot.." status is "..getBot().status.."")
+    end
+    if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 then
+        identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." back to white door, what happened?! trying back to position")
+        print("[ "..getBot().name.." ] slot : "..slot.." back to white door, what happened?! trying back to position")
+        local stuck = 0
+        while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
+            sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
+            sleep(setting.delay.warp)
+            if stuck == 3 then
+                identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is stuck at white door @everyone")
+                print("[ "..getBot().name.." ] status is stuck at white door")
+            end
+        end
+        while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
+            findPath(x,y)
+            sleep(150)
+        end
+        identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." already back to position")
+        print("[ "..getBot().name.." ] slot : "..slot.." already back to position")
     end
 end
 
@@ -1110,13 +1122,15 @@ identity.running = function(threads)
                             end
                         end
                         if findItem(setting.item.block) > 180 then
-                            if setting.item.recycle then
-                                identity.recycles(threads)
-                            else
-                                identity.storingblocks(threads)
-                                identity.door = identity.param
-                                identity.warp(threads,identity.door)
-                                identity.webhookinfo(""..string.upper(setting.typeMode).." mode : "..string.upper(mode).."")
+                            if not setting.mode.takegems then
+                                if setting.item.recycle then
+                                    identity.recycles(threads)
+                                else
+                                    identity.storingblocks(threads)
+                                    identity.door = identity.param
+                                    identity.warp(threads,identity.door)
+                                    identity.webhookinfo(""..string.upper(setting.typeMode).." mode : "..string.upper(mode).."")
+                                end
                             end
                         end
                         if findItem(setting.item.event[1]) > setting.item.amount then
@@ -1177,13 +1191,15 @@ identity.running = function(threads)
                             end
                         end
                         if findItem(setting.item.block) > 180 then
-                            if setting.item.recycle then
-                                identity.recycles(threads)
-                            else
-                                identity.storingblocks(threads)
-                                identity.door = identity.param
-                                identity.warp(threads,identity.door)
-                                identity.webhookinfo(""..string.upper(setting.typeMode).." mode : "..string.upper(mode).."")
+                            if not setting.mode.takegems then
+                                if setting.item.recycle then
+                                    identity.recycles(threads)
+                                else
+                                    identity.storingblocks(threads)
+                                    identity.door = identity.param
+                                    identity.warp(threads,identity.door)
+                                    identity.webhookinfo(""..string.upper(setting.typeMode).." mode : "..string.upper(mode).."")
+                                end
                             end
                         end
                         if findItem(setting.item.event[1]) > setting.item.amount then
@@ -1289,7 +1305,7 @@ identity.support = function(threads)
 end
 
 if BizzantiuM.version == "1.0" and BizzantiuM.handler == "akbarsht" then
-    sleep(math.random(1000,10000))
+    sleep(math.random(300,3000))
     for i = startfrom,#farmList do
         identity.door = identity.param
         setJob(string.upper(setting.typeMode))
