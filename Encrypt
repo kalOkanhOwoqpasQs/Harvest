@@ -271,20 +271,15 @@ identity.reconnect = function(world,id,x,y)
             sendPacket("action|join_request\nname|"..world:upper().."\ninvitedWorld|0",3)
             sleep(setting.delay.warp)
         end
-        if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 then
-            local stuck = 0
-            while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
-                sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
-                sleep(setting.delay.warp)
-                if stuck == 3 then
-                    identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is stuck at white door @everyone")
-                    print("[ "..getBot().name.." ] status is stuck at white door")
+        while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
+            sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
+            sleep(setting.delay.warp)
+            if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg ~= 6 then
+                while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
+                    findPath(x,y)
+                    sleep(150)
                 end
             end
-        end
-        while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
-            findPath(x,y)
-            sleep(100)
         end
         identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." success to joining world @everyone")
         print("[ "..getBot().name.." ] slot : "..slot.." success to joining world")
@@ -309,43 +304,29 @@ identity.reconnect = function(world,id,x,y)
             sendPacket("action|join_request\nname|"..world:upper().."\ninvitedWorld|0",3)
             sleep(setting.delay.warp)
         end
-        if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 then
-            local stuck = 0
-            while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
-                sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
-                sleep(setting.delay.warp)
-                if stuck == 3 then
-                    identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is stuck at white door @everyone")
-                    print("[ "..getBot().name.." ] status is stuck at white door")
-                    error()
+        while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
+            sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
+            sleep(setting.delay.warp)
+            if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg ~= 6 then
+                while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
+                    findPath(x,y)
+                    sleep(150)
                 end
             end
-        end
-        while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
-            findPath(x,y)
-            sleep(150)
         end
         identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is "..getBot().status.." @everyone")
         print("[ "..getBot().name.." ] slot : "..slot.." status is "..getBot().status.."")
     end
-    if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 then
-        identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." back to white door, what happened?! trying back to position")
-        print("[ "..getBot().name.." ] slot : "..slot.." back to white door, what happened?! trying back to position")
-        local stuck = 0
-        while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
-            sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
-            sleep(setting.delay.warp)
-            if stuck == 3 then
-                identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is stuck at white door @everyone")
-                print("[ "..getBot().name.." ] status is stuck at white door")
+    while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
+        sleep(3000)
+        sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
+        sleep(setting.delay.warp)
+        if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg ~= 6 then
+            while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
+                findPath(x,y)
+                sleep(150)
             end
         end
-        while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
-            findPath(x,y)
-            sleep(150)
-        end
-        identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." already back to position")
-        print("[ "..getBot().name.." ] slot : "..slot.." already back to position")
     end
 end
 
@@ -1122,15 +1103,13 @@ identity.running = function(threads)
                             end
                         end
                         if findItem(setting.item.block) > 180 then
-                            if not setting.mode.takegems then
-                                if setting.item.recycle then
-                                    identity.recycles(threads)
-                                else
-                                    identity.storingblocks(threads)
-                                    identity.door = identity.param
-                                    identity.warp(threads,identity.door)
-                                    identity.webhookinfo(""..string.upper(setting.typeMode).." mode : "..string.upper(mode).."")
-                                end
+                            if setting.item.recycle then
+                                identity.recycles(threads)
+                            else
+                                identity.storingblocks(threads)
+                                identity.door = identity.param
+                                identity.warp(threads,identity.door)
+                                identity.webhookinfo(""..string.upper(setting.typeMode).." mode : "..string.upper(mode).."")
                             end
                         end
                         if findItem(setting.item.event[1]) > setting.item.amount then
@@ -1191,15 +1170,13 @@ identity.running = function(threads)
                             end
                         end
                         if findItem(setting.item.block) > 180 then
-                            if not setting.mode.takegems then
-                                if setting.item.recycle then
-                                    identity.recycles(threads)
-                                else
-                                    identity.storingblocks(threads)
-                                    identity.door = identity.param
-                                    identity.warp(threads,identity.door)
-                                    identity.webhookinfo(""..string.upper(setting.typeMode).." mode : "..string.upper(mode).."")
-                                end
+                            if setting.item.recycle then
+                                identity.recycles(threads)
+                            else
+                                identity.storingblocks(threads)
+                                identity.door = identity.param
+                                identity.warp(threads,identity.door)
+                                identity.webhookinfo(""..string.upper(setting.typeMode).." mode : "..string.upper(mode).."")
                             end
                         end
                         if findItem(setting.item.event[1]) > setting.item.amount then
@@ -1213,6 +1190,86 @@ identity.running = function(threads)
                             identity.warp(threads,identity.door)
                             identity.webhookinfo(""..string.upper(setting.typeMode).." mode : "..string.upper(mode).."")
                         elseif findItem(112) > setting.pack.mingems then
+                            identity.buying(threads)
+                            identity.storingpacks(threads)
+                            identity.door = identity.param
+                            identity.warp(threads,identity.door)
+                            identity.webhookinfo(""..string.upper(setting.typeMode).." mode : "..string.upper(mode).."")
+                        end
+                        identity.door = identity.param
+                        findPath(x,y)
+                        identity.reconnect(threads,identity.door,x,y)
+                        if setting.mode.ignoregems then
+                            collect(setting.mode.range,112)
+                        else
+                            collect(setting.mode.range)
+                        end
+                        sleep(setting.delay.collect)
+                    end
+                end
+                if tileD == 1 then
+                    if tileA == 0 then
+                        tileA = 99
+                        tileB = 0
+                        tileC = -1
+                        tileD = 0
+                    elseif tileA == 99 then
+                        tileA = 0
+                        tileB = 99
+                        tileC = 1
+                        tileD = 0
+                    end
+                elseif tileD == 0 then
+                    tileD = tileD + 1
+                end
+            end
+        end
+    elseif setting.typeMode == "gems" then
+        if mode == "up" then
+            for y = -1, 53 do
+                for x = tileA, tileB, tileC do
+                    if getTile(x, y).fg == 0 and getTile(x, y + 1).flags ~= 0 and identity.itemFloat(112) ~= 0 then
+                        trees[threads] = ""..identity.scanTrees(setting.item.seed)..""
+                        if findItem(112) > setting.pack.mingems then
+                            identity.buying(threads)
+                            identity.storingpacks(threads)
+                            identity.door = identity.param
+                            identity.warp(threads,identity.door)
+                            identity.webhookinfo(""..string.upper(setting.typeMode).." mode : "..string.upper(mode).."")
+                        end
+                        identity.door = identity.param
+                        findPath(x,y)
+                        identity.reconnect(threads,identity.door,x,y)
+                        if setting.mode.ignoregems then
+                            collect(setting.mode.range,112)
+                        else
+                            collect(setting.mode.range)
+                        end
+                        sleep(setting.delay.collect)
+                    end
+                end
+                if tileD == 1 then
+                    if tileA == 0 then
+                        tileA = 99
+                        tileB = 0
+                        tileC = -1
+                        tileD = 0
+                    elseif tileA == 99 then
+                        tileA = 0
+                        tileB = 99
+                        tileC = 1
+                        tileD = 0
+                    end
+                elseif tileD == 0 then
+                    tileD = tileD + 1
+                end
+            end
+        elseif mode == "down" then
+            for y = 53, 0, -1 do
+                for x = tileA, tileB, tileC do
+                    if getTile(x, y).fg == 0 and getTile(x, y + 1).flags ~= 0 and identity.itemFloat(112) ~= 0 then
+                        trees[threads] = ""..identity.scanTrees(setting.item.seed)..""
+                        if findItem(112) > setting.pack.mingems then
                             identity.buying(threads)
                             identity.storingpacks(threads)
                             identity.door = identity.param
@@ -1316,7 +1373,7 @@ if BizzantiuM.version == "1.0" and BizzantiuM.handler == "akbarsht" then
                 if setting.typeMode == "harvest" then
                     identity.running(farmList[i])
                     identity.rechecking(farmList[i])
-                elseif setting.typeMode == "collect" then
+                elseif setting.typeMode == "collect" or setting.typeMode == "gems" then
                     identity.running(farmList[i])
                 end
                 timer[farmList[i]] = ""..identity.goodtimes(os.difftime(os.time(),identity.goodtime))..""
