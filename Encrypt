@@ -317,15 +317,21 @@ identity.reconnect = function(world,id,x,y)
         identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is "..getBot().status.." @everyone")
         print("[ "..getBot().name.." ] slot : "..slot.." status is "..getBot().status.."")
     end
-    while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
-        sleep(3000)
-        sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
-        sleep(setting.delay.warp)
-        if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg ~= 6 then
-            while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
-                findPath(x,y)
-                sleep(150)
+    if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 then
+        local count = 0
+        while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
+            count = count + 1
+            sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
+            sleep(setting.delay.warp)
+            if count == 5 then
+                count = 0
+                disconnect()
+                sleep(2000)
             end
+        end
+        while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
+            findPath(x,y)
+            sleep(150)
         end
     end
 end
