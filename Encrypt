@@ -180,7 +180,7 @@ identity.webhookinfo = function(info)
                             }
                         )
                         footer = @{
-                            text = "Developed by BizzantiuM's`nLast updated : ]]..(os.date"%d/%m/%y":upper().." at ")..os.date("%I")..":"..os.date("%M").." "..os.date("%p"):upper()..[["
+                            text = "[Hydrotrium] Developed by BizzantiuM's`nLast updated : ]]..(os.date"%d/%m/%y":upper().." at ")..os.date("%I")..":"..os.date("%M").." "..os.date("%p"):upper()..[["
                         }
                     }
                 )
@@ -317,21 +317,14 @@ identity.reconnect = function(world,id,x,y)
         identity.botinfo("[ ||"..getBot().name.."|| ] slot : "..slot.." status is "..getBot().status.." @everyone")
         print("[ "..getBot().name.." ] slot : "..slot.." status is "..getBot().status.."")
     end
-    if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 then
-        local count = 0
-        while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
-            count = count + 1
-            sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
-            sleep(setting.delay.warp)
-            if count == 5 then
-                count = 0
-                disconnect()
-                sleep(2000)
+    while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
+        sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
+        sleep(setting.delay.warp)
+        if getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg ~= 6 then
+            while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
+                findPath(x,y)
+                sleep(150)
             end
-        end
-        while math.floor(getBot().x / 32) ~= x or math.floor(getBot().y / 32) ~= y do
-            findPath(x,y)
-            sleep(150)
         end
     end
 end
@@ -1323,6 +1316,91 @@ identity.scanTrees = function(threads)
     return count
 end	
 
+identity.dropnpg = function()
+    world = identity.splitt(setting.mode.killghost.world[index],"[^:]+")[1]
+    identity.door = identity.splitt(setting.mode.killghost.world[index],"[^:]+")[2]
+    identity.warp(world,identity.door)
+    if not nuked then
+        if not wrong then
+            while findItem(6086) > 0 do
+                drop(6086)
+                sleep(setting.delay.drop)
+            end
+        else
+            print("Id door world npg is wrong, check ur id door !!")
+            identity.botinfo("Id door world npg is wrong, check ur id door !! @everyone")
+            error()
+        end
+    else
+        print("World npg is nuked, check ur world !!")
+        identity.botinfo("World npg is nuked, check ur world !! @everyone")
+        error()
+    end
+end
+
+identity.npg = function()
+    world = identity.splitt(setting.mode.killghost.world[index],"[^:]+")[1]
+    identity.door = identity.splitt(setting.mode.killghost.world[index],"[^:]+")[2]
+    setJob("Taking NPG")
+    identity.warp(world,identity.door)
+    if not nuked then
+        if not wrong then
+            while findItem(6086) == 0 do
+                for _, obj in pairs(getObjects()) do
+                    if obj.id == 6086 then
+                        findPath(math.floor(obj.x / 32),math.floor(obj.y / 32))
+                        sleep(1000)
+                        collect(2)
+                        sleep(1000)
+                    end
+                    if findItem(6086) > 0  then
+                        break
+                    end
+                end
+            end
+            wear(6086)
+            sleep(500)
+            move(-1,0)
+            sleep(1000)
+            if findItem(6086) > 1 then
+                drop(6086,findItem(6086) - 1)
+                sleep(setting.delay.drop)
+            end
+        else
+            print("Id door world npg is wrong, check ur id door !!")
+            identity.botinfo("Id door world npg is wrong, check ur id door !! @everyone")
+            error()
+        end
+    else
+        print("World npg is nuked, check ur world !!")
+        identity.botinfo("World npg is nuked, check ur world !! @everyone")
+        error()
+    end
+end
+
+identity.killing = function()
+    for _, worlds in pairs(farmList) do
+        identity.door = idList
+        setJob("Killing ghost")
+        identity.warp(worlds,identity.door)
+        if not nuked then
+            if not wrong then
+                sleep(setting.delay.killghost)
+            else
+                wrong = false
+                sleep(1000)
+                print(""..worlds.." is wrong door id, skipped world")
+                identity.botinfo("[ ||"..worlds.."|| ] is wrong door id, skipped world @everyone")
+            end
+        else
+            nuked = false
+            sleep(1000)
+            print(""..worlds.." is NUKED!, check ur world !!")
+            identity.botinfo("[ ||"..worlds.."|| ] is NUKED!, check ur world !! @everyone")
+        end
+    end
+end
+
 identity.support = function(threads)
     setJob("Take support items")
     world = identity.splitt(setting.item.support.world[index],"[^:]+")[1]
@@ -1369,6 +1447,19 @@ end
 
 if BizzantiuM.version == "1.0" and BizzantiuM.handler == "akbarsht" then
     sleep(math.random(300,3000))
+    if setting.mode.killghost.access then
+        if findItem(6086) == 0 then
+            identity.npg()
+            identity.killing()
+            identity.dropnpg()
+        else
+            identity.killing()
+            identity.dropnpg()
+        end
+        print("All ghost are killed, please disable auto kill ghost then re-execute script")
+        identity.botinfo("All ghost are killed, please disable auto kill ghost then re-execute script @everyone")
+        error()
+    end
     for i = startfrom,#farmList do
         identity.door = identity.param
         setJob(string.upper(setting.typeMode))
