@@ -20,6 +20,10 @@ infoid = {}
 timer = {}
 trees = {}
 local identity = {}
+identity.block = 1
+identity.seed = 1
+identity.pack = 1
+identity.event = 1
 identity.param = idList
 identity.goodtime = os.time()
 seedX = setting.storage.seed.drop.x - 1
@@ -367,7 +371,7 @@ identity.buying = function(threads)
 end
 
 identity.storingevents = function(threads)
-    for i = index , #setting.storage.event.world do
+    for i = identity.event , #setting.storage.event.world do
         setJob("Dropping events")
         world = setting.storage.event.world[i]
         identity.door = setting.storage.event.door
@@ -377,10 +381,10 @@ identity.storingevents = function(threads)
             if not wrong then
                 if identity.itemFloat(setting.item.event[1]) >= setting.storage.event.limit then
                     infoid[world] = "["..identity.itemFloat(setting.item.event[1]).."] LIMIT !!!"
-                    identity.botinfo("Events storage : [ ||"..getBot().world.."|| ] has reached limit, skipped world @everyone")
-                    print("Events storage : [ "..getBot().world.." ] has reached limit, skipped world")
-                    index = index + 1
-                    if index > #setting.storage.event.world then
+                    identity.botinfo("Events storage : [ ||"..world.."|| ] has reached limit, skipped world @everyone")
+                    print("Events storage : [ "..world.." ] has reached limit, skipped world")
+                    identity.event = identity.event + 1
+                    if identity.event > #setting.storage.event.world then
                         infoid[world] = "["..identity.itemFloat(setting.item.event[1]).."] LIMIT !!!"
                         identity.botinfo("All events storage has reached limit, Removing bot : [ ||"..getBot().name.."|| ] slot : "..slot.." @everyone")
                         print("All events storage has reached limit, Removing bot : [ "..getBot().name.." ] slot : "..slot.."")
@@ -455,10 +459,10 @@ identity.storingevents = function(threads)
                 infoid[world] = "WRONG DOOR !!!"
                 wrong = false
                 sleep(1000)
-                print("[ "..getBot().world.." ] Id door events storage is wrong, check ur id door!")
-                identity.botinfo("[ ||"..getBot().world.."|| ] Id door events storage is wrong, check ur id door! @everyone")
-                index = index + 1
-                if index > #setting.storage.event.world then
+                print("[ "..world.." ] Id door events storage is wrong, check ur id door!")
+                identity.botinfo("[ ||"..world.."|| ] Id door events storage is wrong, check ur id door! @everyone")
+                identity.event = identity.event + 1
+                if identity.event > #setting.storage.event.world then
                     print("All events storage has reached limit")
                     identity.botinfo("All events storage has reached limit! Removing bot : [ ||"..getBot().name.."|| ] slot : "..slot.." @everyone")
                     identity.webhookinfo("All events storage has reached limit, Removing bot!")
@@ -474,10 +478,10 @@ identity.storingevents = function(threads)
             infoid[world] = "NUKED !!!"
             nuked = false
             sleep(1000)
-            print("[ "..getBot().world.." ] event Storage is NUKED, check ur storage!")
-            identity.botinfo("[ "..getBot().world.." ] event Storage is NUKED, check ur storage! @everyone")
-            index = index + 1
-            if index > #setting.storage.event.world then
+            print("[ "..world.." ] event Storage is NUKED, check ur storage!")
+            identity.botinfo("[ "..world.." ] event Storage is NUKED, check ur storage! @everyone")
+            identity.event = identity.event + 1
+            if identity.event > #setting.storage.event.world then
                 print("All events storage has reached limit!")
                 identity.botinfo("All events storage has reached limit! Removing bot : [ ||"..getBot().name.."|| ] slot : "..slot.." @everyone")
                 identity.webhookinfo("All events storage has reached limit, Removing bot!")
@@ -498,7 +502,7 @@ identity.storingevents = function(threads)
 end
 
 identity.storingpacks = function(threads)
-    for i = index , #setting.storage.pack.world do
+    for i = identity.pack , #setting.storage.pack.world do
         setJob("Dropping packs")
         world = setting.storage.pack.world[i]
         identity.door = setting.storage.pack.door
@@ -508,10 +512,10 @@ identity.storingpacks = function(threads)
             if not wrong then
                 if identity.itemFloat(setting.pack.packList[1]) >= setting.storage.pack.limit then
                     infoid[world] = "["..identity.itemFloat(setting.pack.packList[1]).."] LIMIT !!!"
-                    identity.botinfo("Packs storage : [ ||"..getBot().world.."|| ] has reached limit, skipped world @everyone")
-                    print("Packs storage : [ "..getBot().world.." ] has reached limit, skipped world")
-                    index = index + 1
-                    if index > #setting.storage.pack.world then
+                    identity.botinfo("Packs storage : [ ||"..world.."|| ] has reached limit, skipped world @everyone")
+                    print("Packs storage : [ "..world.." ] has reached limit, skipped world")
+                    identity.pack = identity.pack + 1
+                    if identity.pack > #setting.storage.pack.world then
                         infoid[world] = "["..identity.itemFloat(setting.pack.packList[1]).."] LIMIT !!!"
                         identity.botinfo("All packs storage has reached limit, Removing bot : [ ||"..getBot().name.."|| ] slot : "..slot.." @everyone")
                         print("All packs storage has reached limit, Removing bot : [ "..getBot().name.." ] slot : "..slot.."")
@@ -586,10 +590,10 @@ identity.storingpacks = function(threads)
                 infoid[world] = "WRONG DOOR !!!"
                 wrong = false
                 sleep(1000)
-                print("[ "..getBot().world.." ] Id door packs storage is wrong, check ur id door!")
-                identity.botinfo("[ ||"..getBot().world.."|| ] Id door packs storage is wrong, check ur id door! @everyone")
-                index = index + 1
-                if index > #setting.storage.pack.world then
+                print("[ "..world.." ] Id door packs storage is wrong, check ur id door!")
+                identity.botinfo("[ ||"..world.."|| ] Id door packs storage is wrong, check ur id door! @everyone")
+                identity.pack = identity.pack + 1
+                if identity.pack > #setting.storage.pack.world then
                     print("All packs storage has reached limit")
                     identity.botinfo("All packs storage has reached limit! Removing bot : [ ||"..getBot().name.."|| ] slot : "..slot.." @everyone")
                     identity.webhookinfo("All packs storage has reached limit, Removing bot!")
@@ -605,10 +609,10 @@ identity.storingpacks = function(threads)
             infoid[world] = "NUKED !!!"
             nuked = false
             sleep(1000)
-            print("[ "..getBot().world.." ] packs Storage is NUKED, check ur storage!")
-            identity.botinfo("[ "..getBot().world.." ] packs Storage is NUKED, check ur storage! @everyone")
-            index = index + 1
-            if index > #setting.storage.pack.world then
+            print("[ "..world.." ] packs Storage is NUKED, check ur storage!")
+            identity.botinfo("[ "..world.." ] packs Storage is NUKED, check ur storage! @everyone")
+            identity.pack = identity.pack + 1
+            if identity.pack > #setting.storage.pack.world then
                 print("All packs storage has reached limit!")
                 identity.botinfo("All packs storage has reached limit! Removing bot : [ ||"..getBot().name.."|| ] slot : "..slot.." @everyone")
                 identity.webhookinfo("All packs storage has reached limit, Removing bot!")
@@ -629,7 +633,7 @@ identity.storingpacks = function(threads)
 end
 
 identity.storingseeds = function(threads)
-    for i = index , #setting.storage.seed.world do
+    for i = identity.seed , #setting.storage.seed.world do
         world = setting.storage.seed.world[i]
         identity.door = setting.storage.seed.door
         setJob("Dropping seeds")
@@ -639,10 +643,10 @@ identity.storingseeds = function(threads)
             if not wrong then
                 if identity.itemFloat(setting.item.seed) >= setting.storage.seed.limit then
                     infoid[world] = "["..identity.itemFloat(setting.item.seed).."] LIMIT !!!"
-                    identity.botinfo("Seeds storage : [ ||"..getBot().world.."|| ] has reached limit, skipped world @everyone")
-                    print("Seeds storage : [ "..getBot().world.." ] has reached limit, skipped world")
-                    index = index + 1
-                    if index > #setting.storage.seed.world then
+                    identity.botinfo("Seeds storage : [ ||"..world.."|| ] has reached limit, skipped world @everyone")
+                    print("Seeds storage : [ "..world.." ] has reached limit, skipped world")
+                    identity.seed = identity.seed + 1
+                    if identity.seed > #setting.storage.seed.world then
                         infoid[world] = "["..identity.itemFloat(setting.item.seed).."] LIMIT !!!"
                         identity.botinfo("All seeds storage has reached limit, Removing bot : [ ||"..getBot().name.."|| ] slot : "..slot.." @everyone")
                         print("All seeds storage has reached limit, Removing bot : [ "..getBot().name.." ] slot : "..slot.." @everyone")
@@ -688,10 +692,10 @@ identity.storingseeds = function(threads)
                 infoid[world] = "WRONG DOOR !!!"
                 wrong = false
                 sleep(1000)
-                print("[ "..getBot().world.." ] Id door seeds storage is wrong, check ur id door!")
-                identity.botinfo("[ "..getBot().world.." ] Id door seeds storage is wrong, check ur id door! @everyone")
-                index = index + 1
-                if index > #setting.storage.seed.world then
+                print("[ "..world.." ] Id door seeds storage is wrong, check ur id door!")
+                identity.botinfo("[ "..world.." ] Id door seeds storage is wrong, check ur id door! @everyone")
+                identity.seed = identity.seed + 1
+                if identity.seed > #setting.storage.seed.world then
                     print("All seeds storage has reached limit")
                     identity.botinfo("All seeds storage has reached limit @everyone")
                     identity.webhookinfo("All seeds storage has reached limit, Removing bot!")
@@ -707,10 +711,10 @@ identity.storingseeds = function(threads)
             infoid[world] = "NUKED !!!"
             nuked = false
             sleep(1000)
-            print("[ "..getBot().world.." ] seeds Storage is NUKED, check ur storage!")
-            identity.botinfo("[ "..getBot().world.." ] seeds Storage is NUKED, check ur storage! @everyone")
-            index = index + 1
-            if index > #setting.storage.seed.world then
+            print("[ "..world.." ] seeds Storage is NUKED, check ur storage!")
+            identity.botinfo("[ "..world.." ] seeds Storage is NUKED, check ur storage! @everyone")
+            identity.seed = identity.seed + 1
+            if identity.seed > #setting.storage.seed.world then
                 print("All seeds storage has reached limit!")
                 identity.botinfo("All seeds storage has reached limit! @everyone")
                 identity.webhookinfo("All seeds storage has reached limit, Removing bot!")
@@ -731,7 +735,7 @@ identity.storingseeds = function(threads)
 end
 
 identity.storingblocks = function(threads)
-    for i = index , #setting.storage.block.world do
+    for i = identity.block , #setting.storage.block.world do
         world = setting.storage.block.world[i]
         identity.door = setting.storage.block.door
         setJob("Dropping Blocks")
@@ -741,10 +745,10 @@ identity.storingblocks = function(threads)
             if not wrong then
                 if identity.itemFloat(setting.item.block) >= setting.storage.block.limit then
                     infoid[world] = "["..identity.itemFloat(setting.item.block).."] LIMIT !!!"
-                    identity.botinfo("Blocks storage : [ ||"..getBot().world.."|| ] has reached limit, skipped world @everyone")
-                    print("Blocks storage : [ "..getBot().world.." ] has reached limit, skipped world")
-                    index = index + 1
-                    if index > #setting.storage.block.world then
+                    identity.botinfo("Blocks storage : [ ||"..world.."|| ] has reached limit, skipped world @everyone")
+                    print("Blocks storage : [ "..world.." ] has reached limit, skipped world")
+                    identity.block = identity.block + 1
+                    if identity.block > #setting.storage.block.world then
                         infoid[world] = "["..identity.itemFloat(setting.item.block).."] LIMIT !!!"
                         identity.botinfo("All blocks storage has reached limit, Removing bot : [ ||"..getBot().name.."|| ] slot : "..slot.." @everyone")
                         print("All blocks storage has reached limit, Removing bot : [ "..getBot().name.." ] slot : "..slot.." @everyone")
@@ -790,10 +794,10 @@ identity.storingblocks = function(threads)
                 infoid[world] = "WRONG DOOR !!!"
                 wrong = false
                 sleep(1000)
-                print("[ "..getBot().world.." ] Id door blocks storage is wrong, check ur id door!")
-                identity.botinfo("[ "..getBot().world.." ] Id door blocks storage is wrong, check ur id door! @everyone")
-                index = index + 1
-                if index > #setting.storage.block.world then
+                print("[ "..world.." ] Id door blocks storage is wrong, check ur id door!")
+                identity.botinfo("[ "..world.." ] Id door blocks storage is wrong, check ur id door! @everyone")
+                identity.block = identity.block + 1
+                if identity.block > #setting.storage.block.world then
                     print("All blocks storage has reached limit")
                     identity.botinfo("All blocks storage has reached limit @everyone")
                     identity.webhookinfo("All blocks storage has reached limit, Removing bot!")
@@ -809,10 +813,10 @@ identity.storingblocks = function(threads)
             infoid[world] = "NUKED !!!"
             nuked = false
             sleep(1000)
-            print("[ "..getBot().world.." ] blocks Storage is NUKED, check ur storage!")
-            identity.botinfo("[ "..getBot().world.." ] blocks Storage is NUKED, check ur storage! @everyone")
-            index = index + 1
-            if index > #setting.storage.block.world then
+            print("[ "..world.." ] blocks Storage is NUKED, check ur storage!")
+            identity.botinfo("[ "..world.." ] blocks Storage is NUKED, check ur storage! @everyone")
+            identity.block = identity.block + 1
+            if identity.block > #setting.storage.block.world then
                 print("All blocks storage has reached limit!")
                 identity.botinfo("All blocks storage has reached limit! @everyone")
                 identity.webhookinfo("All blocks storage has reached limit, Removing bot!")
