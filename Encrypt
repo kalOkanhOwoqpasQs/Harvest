@@ -129,7 +129,7 @@ identity.webhookinfo = function()
                 username = "BizzantiuM's"
                 embeds = @(
                     @{
-                        title = "AUTO HARVEST v1.0[]]..string.upper(setting.typeMode)..[[]"
+                        title = "AUTO HARVEST v1.1 []]..string.upper(setting.typeMode)..[[]"
                         color = "]]..math.random(111111,999999)..[["
                         fields = @(
                             @{
