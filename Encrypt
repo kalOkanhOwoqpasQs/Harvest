@@ -310,7 +310,7 @@ identity.reconnect = function(world,id,x,y)
         while getBot().status ~= "online" do
             connect()
             sleep(setting.delay.reconnect)
-            if getBot().status == "suspended" or getBot().status == "banned" or getBot().status == "ercon" or getBot().status == "maintenance" then
+            if getBot().status == "suspended" or getBot().status == "banned" or getBot().status == "maintenance" then
                 identity.botinfo("[ ||"..getBot().name.."|| ] status is "..getBot().status..", removing bot @everyone")
                 sleep(250)
                 print("[ "..getBot().name.." ] status is "..getBot().status..", removing bot")
