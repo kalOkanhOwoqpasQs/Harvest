@@ -1454,6 +1454,11 @@ identity.writeFile = function(threads)
     file:close()
 end
 
+while getBot().status ~= "online" do
+    connect()
+    sleep(reconnect)
+end
+
 if BizzantiuM.version == "1.2" and BizzantiuM.handler == "akbarsht" then
     sleep(math.random(300,3000))
     if killghost then
