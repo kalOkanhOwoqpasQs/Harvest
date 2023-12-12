@@ -213,13 +213,13 @@ identity.warp = function(world,door)
                 if string.find(varlist[1],"inaccessible.") then
                     nuked = true
                 end
-                if string.find(varlist[1], "experiencing high load,") then
+                if string.find(varlist[1],"experiencing high load,") then
                     subserver = true
                 end
-                if string.find(varlist[1], "people in it.") then
+                if string.find(varlist[1],"people in it.") then
                     people = true
                 end
-                if string.find(varlist[1], "Players lower than level") then
+                if string.find(varlist[1],"Players lower than level") then
                     level = true
                 end
             end
@@ -230,7 +230,7 @@ identity.warp = function(world,door)
                 sleep(delayreconnect)
                 if getBot().status == "suspended" or getBot().status == "banned" or getBot().status == "maintenance" then
                     identity.botinfo("[ ||"..getBot().name.."|| ] status is "..getBot().status..", removing bot @everyone")
-                    if removeBot then
+                    if removingbot then
                         removeBot(getBot().name)
                         sleep(2000)
                     end
@@ -252,7 +252,7 @@ identity.warp = function(world,door)
                     sleep(delayreconnect)
                     if getBot().status == "suspended" or getBot().status == "banned" or getBot().status == "maintenance" then
                         identity.botinfo("[ ||"..getBot().name.."|| ] status is "..getBot().status..", removing bot @everyone")
-                        if removeBot then
+                        if removingbot then
                             removeBot(getBot().name)
                             sleep(2000)
                         end
@@ -311,7 +311,7 @@ identity.reconnect = function(world,id,x,y)
             sleep(delayreconnect)
             if getBot().status == "suspended" or getBot().status == "banned" or getBot().status == "maintenance" then
                 identity.botinfo("[ ||"..getBot().name.."|| ] status is "..getBot().status..", removing bot @everyone")
-                if removeBot then
+                if removingbot then
                     removeBot(getBot().name)
                     sleep(2000)
                 end
@@ -467,7 +467,7 @@ identity.storingevents = function(threads)
                                     infoid[world] = "["..identity.itemFloat(itemevent[1]).."] LIMIT !!!"
                                     identity.botinfo("All events storage has reached limit, Removing bot : [ ||"..getBot().name.."|| ] @everyone")
                                     print("All events storage has reached limit, Removing bot : [ "..getBot().name.." ]")
-                                    if removeBot then
+                                    if removingbot then
                                         removeBot(getBot().name)
                                         sleep(2000)
                                     end
@@ -543,7 +543,7 @@ identity.storingevents = function(threads)
                             if identity.event > #storageevent then
                                 print("All events storage has reached limit")
                                 identity.botinfo("All events storage has reached limit! Removing bot : [ ||"..getBot().name.."|| ] @everyone")
-                                if removeBot then
+                                if removingbot then
                                     removeBot(getBot().name)
                                     sleep(2000)
                                 end
@@ -561,7 +561,7 @@ identity.storingevents = function(threads)
                         if identity.event > #storageevent then
                             print("All events storage has reached limit!")
                             identity.botinfo("All events storage has reached limit! Removing bot : [ ||"..getBot().name.."|| ] @everyone")
-                            if removeBot then
+                            if removingbot then
                                 removeBot(getBot().name)
                                 sleep(2000)
                             end
@@ -620,7 +620,7 @@ identity.storingpacks = function(threads)
                                     infoid[world] = "["..identity.itemFloat(packList[1]).."] LIMIT !!!"
                                     identity.botinfo("All packs storage has reached limit, Removing bot : [ ||"..getBot().name.."|| ] @everyone")
                                     print("All packs storage has reached limit, Removing bot : [ "..getBot().name.." ]")
-                                    if removeBot then
+                                    if removingbot then
                                         removeBot(getBot().name)
                                         sleep(2000)
                                     end
@@ -696,7 +696,7 @@ identity.storingpacks = function(threads)
                             if identity.pack > #storagepack then
                                 print("All packs storage has reached limit")
                                 identity.botinfo("All packs storage has reached limit! Removing bot : [ ||"..getBot().name.."|| ] @everyone")
-                                if removeBot then
+                                if removingbot then
                                     removeBot(getBot().name)
                                     sleep(2000)
                                 end
@@ -714,7 +714,7 @@ identity.storingpacks = function(threads)
                         if identity.pack > #storagepack then
                             print("All packs storage has reached limit!")
                             identity.botinfo("All packs storage has reached limit! Removing bot : [ ||"..getBot().name.."|| ] @everyone")
-                            if removeBot then
+                            if removingbot then
                                 removeBot(getBot().name)
                                 sleep(2000)
                             end
@@ -773,7 +773,7 @@ identity.storingseeds = function(threads)
                                     infoid[world] = "["..identity.itemFloat(seed).."] LIMIT !!!"
                                     identity.botinfo("All seeds storage has reached limit, Removing bot : [ ||"..getBot().name.."|| ] @everyone")
                                     print("All seeds storage has reached limit, Removing bot : [ "..getBot().name.." ] @everyone")
-                                    if removeBot then
+                                    if removingbot then
                                         removeBot(getBot().name)
                                         sleep(2000)
                                     end
@@ -820,7 +820,7 @@ identity.storingseeds = function(threads)
                             if identity.seed > #storageseed then
                                 print("All seeds storage has reached limit")
                                 identity.botinfo("All seeds storage has reached limit @everyone")
-                                if removeBot then
+                                if removingbot then
                                     removeBot(getBot().name)
                                     sleep(2000)
                                 end
@@ -838,7 +838,7 @@ identity.storingseeds = function(threads)
                         if identity.seed > #storageseed then
                             print("All seeds storage has reached limit!")
                             identity.botinfo("All seeds storage has reached limit! @everyone")
-                            if removeBot then
+                            if removingbot then
                                 removeBot(getBot().name)
                                 sleep(2000)
                             end
@@ -898,7 +898,7 @@ identity.storingblocks = function(threads)
                                     infoid[world] = "["..identity.itemFloat(block).."] LIMIT !!!"
                                     identity.botinfo("All blocks storage has reached limit, Removing bot : [ ||"..getBot().name.."|| ] @everyone")
                                     print("All blocks storage has reached limit, Removing bot : [ "..getBot().name.." ] @everyone")
-                                    if removeBot then
+                                    if removingbot then
                                         removeBot(getBot().name)
                                         sleep(2000)
                                     end
@@ -945,7 +945,7 @@ identity.storingblocks = function(threads)
                             if identity.block > #storageblock then
                                 print("All blocks storage has reached limit")
                                 identity.botinfo("All blocks storage has reached limit @everyone")
-                                if removeBot then
+                                if removingbot then
                                     removeBot(getBot().name)
                                     sleep(2000)
                                 end
@@ -963,7 +963,7 @@ identity.storingblocks = function(threads)
                         if identity.block > #storageblock then
                             print("All blocks storage has reached limit!")
                             identity.botinfo("All blocks storage has reached limit! @everyone")
-                            if removeBot then
+                            if removingbot then
                                 removeBot(getBot().name)
                                 sleep(2000)
                             end
@@ -1552,7 +1552,7 @@ if BizzantiuM.version == "1.2" and BizzantiuM.handler == "akbarsht" then
     end
     print("[ "..getBot().name.." ] Already finished all world, Terminated script!")
     identity.botinfo("[ ||"..getBot().name.."|| ] Already finished all world, Terminated script! @everyone")
-    if removeBot then
+    if removingbot then
         removeBot(getBot().name)
         sleep(2000)
     end
