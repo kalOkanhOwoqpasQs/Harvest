@@ -225,8 +225,20 @@ identity.warp = function(world,door)
             end
         end)
         while getBot().world ~= string.upper(world) and not nuked and not subserver and not people and not level do
+            while getBot().status ~= "online" do
+                connect()
+                sleep(delayreconnect)
+                if getBot().status == "suspended" or getBot().status == "banned" or getBot().status == "maintenance" then
+                    identity.botinfo("[ ||"..getBot().name.."|| ] status is "..getBot().status..", removing bot @everyone")
+                    if removeBot then
+                        removeBot(getBot().name)
+                        sleep(2000)
+                    end
+                    error()
+                end
+            end
             sendPacket("action|join_request\nname|"..name.."\ninvitedWorld|0",3)
-            sleep(warp)
+            sleep(delaywarp)
         end
         removeHooks()
         sleep(2000)
@@ -235,8 +247,20 @@ identity.warp = function(world,door)
         if door ~= "" then
             local stuck = 0
             while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 and not wrong do
+                while getBot().status ~= "online" do
+                    connect()
+                    sleep(delayreconnect)
+                    if getBot().status == "suspended" or getBot().status == "banned" or getBot().status == "maintenance" then
+                        identity.botinfo("[ ||"..getBot().name.."|| ] status is "..getBot().status..", removing bot @everyone")
+                        if removeBot then
+                            removeBot(getBot().name)
+                            sleep(2000)
+                        end
+                        error()
+                    end
+                end
                 sendPacket("action|join_request\nname|"..name.."\ninvitedWorld|0",3)
-                sleep(warp)
+                sleep(delaywarp)
                 stuck = stuck + 1
                 if stuck == 5 then
                     wrong = true
@@ -247,12 +271,12 @@ identity.warp = function(world,door)
 end
 
 identity.reconnect = function(world,id,x,y)
-    if getBot().world ~= world:upper() and getBot().status == "online" then 
+    if getBot().world == "EXIT" and getBot().status == "online" then 
         identity.botinfo("[ ||"..getBot().name.."|| ] at EXIT ??, trying to joining world again @everyone")
         local count = 0
         while getBot().world ~= world:upper() do
             sendPacket("action|join_request\nname|"..world:upper().."\ninvitedWorld|0",3)
-            sleep(warp)
+            sleep(delaywarp)
             if getBot().world ~= world:upper() then 
                 count = count + 1
                 if count > 5 then
@@ -265,7 +289,7 @@ identity.reconnect = function(world,id,x,y)
             local stucks = 0
             while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
                 sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
-                sleep(warp)
+                sleep(delaywarp)
                 if stucks > 3 then
                     identity.botinfo("[ ||"..getBot().name.."|| ] Failed to reconnecting bot, stuck at white door. Terminated script @everyone")
                     error()
@@ -284,7 +308,7 @@ identity.reconnect = function(world,id,x,y)
         identity.botinfo("[ ||"..getBot().name.."|| ] status is "..getBot().status.." @everyone")
         while getBot().status ~= "online" do
             connect()
-            sleep(reconnect)
+            sleep(delayreconnect)
             if getBot().status == "suspended" or getBot().status == "banned" or getBot().status == "maintenance" then
                 identity.botinfo("[ ||"..getBot().name.."|| ] status is "..getBot().status..", removing bot @everyone")
                 if removeBot then
@@ -297,7 +321,7 @@ identity.reconnect = function(world,id,x,y)
         local counts = 0
         while getBot().world ~= world:upper() do
             sendPacket("action|join_request\nname|"..world:upper().."\ninvitedWorld|0",3)
-            sleep(warp)
+            sleep(delaywarp)
             if getBot().world ~= world:upper() then 
                 counts = counts + 1
                 if counts > 5 then
@@ -310,7 +334,7 @@ identity.reconnect = function(world,id,x,y)
             local stuckk = 0
             while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
                 sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
-                sleep(warp)
+                sleep(delaywarp)
                 if stuckk > 3 then
                     identity.botinfo("[ ||"..getBot().name.."|| ] Failed to reconnecting bot, stuck at white door. Terminated script @everyone")
                     error()
@@ -331,7 +355,7 @@ identity.reconnect = function(world,id,x,y)
         if id ~= "" then
             while getTile(math.floor(getBot().x / 32),math.floor(getBot().y / 32)).fg == 6 do
                 sendPacket("action|join_request\nname|" ..world:upper().."|"..id:upper().."\ninvitedWorld|0", 3)
-                sleep(warp)
+                sleep(delaywarp)
                 if stuck > 3 then
                     identity.botinfo("[ ||"..getBot().name.."|| ] Failed to reconnecting bot, stuck at white door. Terminated script @everyone")
                     error()
@@ -466,7 +490,7 @@ identity.storingevents = function(threads)
                                                 end
                                                 while findItem(pack) > 0 do
                                                     drop(pack)
-                                                    sleep(drops)
+                                                    sleep(delaydrop)
                                                     identity.reconnect(world,doorstorageevent,eventX + (tileEvent),eventY - (y - 1))
                                                     count = count + 1
                                                     if count >= 2 then
@@ -491,7 +515,7 @@ identity.storingevents = function(threads)
                                                 end
                                                 while findItem(pack) > 0 do
                                                     drop(pack)
-                                                    sleep(drops)
+                                                    sleep(delaydrop)
                                                     identity.reconnect(world,doorstorageevent,eventX + (tileEvent),eventY)
                                                     count = count + 1
                                                     if count >= 2 then
@@ -619,7 +643,7 @@ identity.storingpacks = function(threads)
                                                 end
                                                 while findItem(pack) > 0 do
                                                     drop(pack)
-                                                    sleep(drops)
+                                                    sleep(delaydrop)
                                                     identity.reconnect(world,doorstoragepack,packX + (tilePack),packY - (y-1))
                                                     count = count + 1
                                                     if count >= 2 then
@@ -644,7 +668,7 @@ identity.storingpacks = function(threads)
                                                 end
                                                 while findItem(pack) > 0 do
                                                     drop(pack)
-                                                    sleep(drops)
+                                                    sleep(delaydrop)
                                                     identity.reconnect(world,doorstoragepack,packX + (tilePack),packY)
                                                     count = count + 1
                                                     if count >= 2 then
@@ -770,7 +794,7 @@ identity.storingseeds = function(threads)
                                         end
                                         while findItem(seed) > 0 do
                                             drop(seed)
-                                            sleep(drops)
+                                            sleep(delaydrop)
                                             identity.reconnect(world,doorstorageseed,seedX + (tileSeed),seedY)
                                             count = count + 1
                                             if count >= 2 then
@@ -895,7 +919,7 @@ identity.storingblocks = function(threads)
                                         end
                                         while findItem(block) > 0 do
                                             drop(block)
-                                            sleep(drops)
+                                            sleep(delaydrop)
                                             identity.reconnect(world,doorstorageblock,blockX + (tileBlock),blockY)
                                             count = count + 1
                                             if count >= 2 then
@@ -1016,7 +1040,7 @@ identity.rechecking = function(threads)
                 identity.reconnect(threads,doorfarmList,tile.x,tile.y)
                 if tile.fg == seed then
                     punch(0,0)
-                    sleep(harvest)
+                    sleep(delayharvest)
                     identity.reconnect(threads,doorfarmList,tile.x,tile.y)
                 end
                 if ignoregems then
@@ -1024,7 +1048,7 @@ identity.rechecking = function(threads)
                 else
                     collect(range)
                 end
-                sleep(collects)
+                sleep(delaycollect)
             end
         end
     end
@@ -1032,13 +1056,13 @@ identity.rechecking = function(threads)
         if obj.id == block then
             if identity.itemFloat(block) ~= 0 then
                 findPath(math.floor(obj.x / 32),math.floor(obj.y / 32))
-                sleep(collects)
+                sleep(delaycollect)
                 if ignoregems then
                     collect(range,112)
                 else
                     collect(range)
                 end
-                sleep(collects)
+                sleep(delaycollect)
                 identity.reconnect(threads,doorfarmList,math.floor(obj.x / 32),math.floor(obj.y / 32))
             end
             if findItem(block) > 180 then
@@ -1112,7 +1136,7 @@ identity.running = function(threads)
                     identity.reconnect(threads,doorfarmList,x,y)
                     if getTile(x,y).fg == seed then
                         punch(0,0)
-                        sleep(harvest)
+                        sleep(delayharvest)
                         identity.reconnect(threads,doorfarmList,x,y)
                     end
                     if ignoregems then
@@ -1144,13 +1168,13 @@ identity.running = function(threads)
             if obj.id == block then
                 if identity.itemFloat(block) ~= 0 then
                     findPath(math.floor(obj.x / 32),math.floor(obj.y / 32))
-                    sleep(collects)
+                    sleep(delaycollect)
                     if ignoregems then
                         collect(range,112)
                     else
                         collect(range)
                     end
-                    sleep(collects)
+                    sleep(delaycollect)
                     identity.reconnect(threads,doorfarmList,math.floor(obj.x / 32),math.floor(obj.y / 32))
                 end
                 if findItem(block) > 180 then
@@ -1183,13 +1207,13 @@ identity.running = function(threads)
             if obj.id == 112 then
                 if identity.itemFloat(obj.id) ~= 0 then
                     findPath(math.floor(obj.x / 32),math.floor(obj.y / 32))
-                    sleep(collects)
+                    sleep(delaycollect)
                     if ignoregems then
                         collect(range,112)
                     else
                         collect(range)
                     end
-                    sleep(collects)
+                    sleep(delaycollect)
                     identity.reconnect(threads,doorfarmList,math.floor(obj.x / 32),math.floor(obj.y / 32))
                 end
                 if findItem(112) > mingems and buypack then
@@ -1216,7 +1240,7 @@ identity.dropnpg = function()
                     if not wrong then
                         while findItem(6086) > 0 do
                             drop(6086)
-                            sleep(drops)
+                            sleep(delaydrop)
                             move(0,-1)
                             sleep(250)
                         end
@@ -1290,7 +1314,7 @@ identity.npg = function()
                         sleep(1000)
                         if findItem(6086) > 1 then
                             drop(6086,findItem(6086) - 1)
-                            sleep(drops)
+                            sleep(delaydrop)
                         end
                     else
                         wrong = false
@@ -1341,6 +1365,7 @@ identity.killing = function()
             if not level then
                 if not subserver then
                     if not nuked then
+                        sleep(delaykill)
                     else
                         nuked = false
                         sleep(5000)
@@ -1452,11 +1477,6 @@ identity.writeFile = function(threads)
     local file = io.open("WorldStatus.txt","a")
     file:write(threads.."\n")
     file:close()
-end
-
-while getBot().status ~= "online" do
-    connect()
-    sleep(reconnect)
 end
 
 if BizzantiuM.version == "1.2" and BizzantiuM.handler == "akbarsht" then
